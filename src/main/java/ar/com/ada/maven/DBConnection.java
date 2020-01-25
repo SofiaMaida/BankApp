@@ -9,8 +9,8 @@ public class DBConnection {
     private static Connection connection;
     private static String user = "root";
     private static String host = "jdbc:mysql://localhost:3306/";
-    private static String password = "venezuelalara";
-    private static String db = "ZooDB";
+    private static String password = "Contraseña";
+    private static String db = "BankRotaDB";
     private static String drive = "com.mysql.cj.jdbc.Driver";
 
     private DBConnection(){}

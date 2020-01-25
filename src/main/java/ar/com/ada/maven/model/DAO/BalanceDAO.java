@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public class BalanceDAO implements DAO<BalanceDTO> {
 
-    private Boolean willCloseConnnection = true;
+    private Boolean willCloseConnection = true;
     public AccountDAO accountDAO = new AccountDAO(false);
     public BalanceDAO(boolean b) {}
     public BalanceDAO(){}
@@ -27,7 +27,7 @@ public class BalanceDAO implements DAO<BalanceDTO> {
                 BalanceDTO balanceDTO = new BalanceDTO(rs.getInt("id"), rs.getDouble("balance"), account);
                 balance.add(balanceDTO);
             }
-            if (willCloseConnnection)
+            if (willCloseConnection)
                 connection.close();
         } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
             System.out.println("CONNECTION ERROR FINDALL BALANCE: " + e.getMessage());
@@ -48,7 +48,7 @@ public class BalanceDAO implements DAO<BalanceDTO> {
                 AccountDTO account = accountDAO.findById(rs.getInt("Account_id"));
                 balance = new BalanceDTO(rs.getInt("id"), rs.getDouble("balance"), account);
             }
-            if (willCloseConnnection) connection.close();
+            if (willCloseConnection) connection.close();
 
         } catch (Exception e) {
             System.out.println("CONNECTION ERROR FINDBYID BALANCE: " + e.getMessage());
@@ -87,7 +87,7 @@ public class BalanceDAO implements DAO<BalanceDTO> {
             if (!(balanceDTO.getBalance().equals(balanceDB.getBalance()) &&
                     balanceDTO.getAccount().equals(balanceDB.getAccount())));
             hasUpdate = preparedStatement.executeUpdate();
-            if (willCloseConnnection) connection.close();
+            if (willCloseConnection) connection.close();
         } catch (Exception e) {
             System.out.println("CONNECTION ERROR UPDATE BALANCE: " + e.getMessage());
         }

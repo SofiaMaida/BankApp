@@ -10,7 +10,7 @@ import java.util.Collection;
 
 public class TransactionDAO implements DAO<TransactionDTO> {
 
-    private Boolean willCloseConnnection = true;
+    private Boolean willCloseConnection = true;
     public MovementsDAO movementsDAO = new MovementsDAO(false);
     public TransactionDAO(boolean b) {}
     public TransactionDAO(){}
@@ -25,10 +25,11 @@ public class TransactionDAO implements DAO<TransactionDTO> {
             ResultSet rs = statement.executeQuery(sql);
             while (rs.next()) {
                 MovementsDTO movements = movementsDAO.findById(rs.getInt("Movements_id"));
-                TransactionDTO transactionDTO = new TransactionDTO(rs.getInt("id"), rs.getInt("amount"), movements);
+                TransactionDTO transactionDTO = new TransactionDTO(rs.getInt("id"),
+                        rs.getInt("amount"), movements);
                 transaction.add(transactionDTO);
             }
-            if (willCloseConnnection)
+            if (willCloseConnection)
                 connection.close();
         } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
             System.out.println("CONNECTION ERROR FINDALL TRANSACTION: " + e.getMessage());
@@ -49,7 +50,7 @@ public class TransactionDAO implements DAO<TransactionDTO> {
                 MovementsDTO movements = movementsDAO.findById(rs.getInt("Movements_id"));
                 transaction = new TransactionDTO(rs.getInt("id"), rs.getInt("amount"), movements);
             }
-            if (willCloseConnnection) connection.close();
+            if (willCloseConnection) connection.close();
 
         } catch (Exception e) {
             System.out.println("CONNECTION ERROR FINDBYID MOVEMENTS: " + e.getMessage());
@@ -85,10 +86,10 @@ public class TransactionDAO implements DAO<TransactionDTO> {
             preparedStatement.setInt(1, transactionDTO.getAmount());
             preparedStatement.setInt(2, transactionDTO.getMovements().getId());
 
-            if (!(transactionDTO.getAmount().equals(transactionDB.getAmount()) &&
-                    transactionDTO.getMovements().equals(transactionDB.getMovements())));
-            hasUpdate = preparedStatement.executeUpdate();
-            if (willCloseConnnection) connection.close();
+            if (!transactionDTO.getAmount().equals(transactionDB.getAmount())
+                    && transactionDTO.getMovements().equals(transactionDB.getMovements()));
+
+            if (willCloseConnection) connection.close();
         } catch (Exception e) {
             System.out.println("CONNECTION ERROR UPDATE TRANSACTION: " + e.getMessage());
         }

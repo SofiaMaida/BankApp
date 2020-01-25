@@ -9,9 +9,11 @@ import java.util.ArrayList;
 
 public class AccountDAO implements DAO<AccountDTO> {
 
-    private Boolean willCloseConnnection = true;
+    private Boolean willCloseConnection = true;
     public PersonDAO personDAO = new PersonDAO(false);
+
     public AccountDAO(boolean b) {}
+
     public AccountDAO(){}
 
     @Override
@@ -27,7 +29,7 @@ public class AccountDAO implements DAO<AccountDTO> {
                 AccountDTO accountDTO = new AccountDTO(rs.getInt("id"), rs.getInt("number_account"), person);
                 account.add(accountDTO);
             }
-            if (willCloseConnnection)
+            if (willCloseConnection)
                 connection.close();
         } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
             System.out.println("CONNECTION ERROR FINDALL ACCOUNT: " + e.getMessage());
@@ -48,7 +50,7 @@ public class AccountDAO implements DAO<AccountDTO> {
                 PersonDTO person = personDAO.findById(rs.getInt("Person_id"));
                 account = new AccountDTO(rs.getInt("id"), rs.getInt("number_account"), person);
             }
-            if (willCloseConnnection) connection.close();
+            if (willCloseConnection) connection.close();
 
         } catch (Exception e) {
             System.out.println("CONNECTION ERROR FINDBYID ACCOUNT: " + e.getMessage());
@@ -87,7 +89,7 @@ public class AccountDAO implements DAO<AccountDTO> {
             if (!(accountDTO.getNumber_account().equals(accountDB.getNumber_account()) &&
                     accountDTO.getPerson().equals(accountDB.getPerson())));
             hasUpdate = preparedStatement.executeUpdate();
-            if (willCloseConnnection) connection.close();
+            if (willCloseConnection) connection.close();
         } catch (Exception e) {
             System.out.println("CONNECTION ERROR UPDATE ACCOUNT: " + e.getMessage());
         }

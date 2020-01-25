@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class MovementsDAO implements DAO<MovementsDTO> {
 
-    private Boolean willCloseConnnection = true;
+    private Boolean willCloseConnection = true;
     public AccountDAO accountDAO = new AccountDAO(false);
     public BalanceDAO balanceDAO = new BalanceDAO(false);
     public Type_movementsDAO type_movementsDAO = new Type_movementsDAO(false);
@@ -36,7 +36,7 @@ public class MovementsDAO implements DAO<MovementsDTO> {
                         balance, account, type_movements);
                 movements.add(movementsDTO);
             }
-            if (willCloseConnnection)
+            if (willCloseConnection)
                 connection.close();
         } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
             System.out.println("CONNECTION ERROR FINDALL MOVEMENTS: " + e.getMessage());
@@ -58,10 +58,10 @@ public class MovementsDAO implements DAO<MovementsDTO> {
                 BalanceDTO balance = balanceDAO.findById(rs.getInt("Balance_id"));
                 Type_movementsDTO type_movements = type_movementsDAO.findById(rs.getInt("Type_movements_id"));
 
-                movements = new MovementsDTO(rs.getInt("id"), rs.getDate("move_date"), rs.getString("description"),
-                        balance, account, type_movements);
+                movements = new MovementsDTO(rs.getInt("id"), rs.getDate("move_date"),
+                        rs.getString("description"), balance, account, type_movements);
             }
-            if (willCloseConnnection) connection.close();
+            if (willCloseConnection) connection.close();
 
         } catch (Exception e) {
             System.out.println("CONNECTION ERROR FINDBYID MOVEMENTS: " + e.getMessage());
@@ -109,7 +109,7 @@ public class MovementsDAO implements DAO<MovementsDTO> {
                     movementsDTO.getBalance().equals(movementsDB.getBalance()) &&
                     movementsDTO.getType_movements().equals(movementsDB.getType_movements())));
             hasUpdate = preparedStatement.executeUpdate();
-            if (willCloseConnnection) connection.close();
+            if (willCloseConnection) connection.close();
         } catch (Exception e) {
             System.out.println("CONNECTION ERROR UPDATE MOVEMENTS: " + e.getMessage());
         }
