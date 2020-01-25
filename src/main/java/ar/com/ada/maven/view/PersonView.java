@@ -4,37 +4,41 @@ import ar.com.ada.maven.model.DTO.PersonDTO;
 import ar.com.ada.maven.utils.Ansi;
 import ar.com.ada.maven.utils.Keyboard;
 
+import java.util.HashMap;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
 public class PersonView {
 
-    public String getNewClient() {
+    public HashMap<String, String > getNewClient() {
+        HashMap<String,String> data = new HashMap<>();
+        Scanner scanner = Keyboard.getInstance();
+
         System.out.println("Formulario para comenzar a ser cliente de Bank Rota");
         System.out.println("\nIngrese su nombre completo: ");
-        Scanner scanner = Keyboard.getInstance();
-        scanner.nextLine();
+        data.put("name", scanner.nextLine());
 
-        System.out.println("\nIngrese su apellido: ");
-        scanner = Keyboard.getInstance();
-        scanner.nextLine();
+        System.out.println("\nIngrese sus apellidos Completos: ");
+        data.put("lastName", scanner.nextLine());
 
         System.out.println("\nIngrese un tipo de documento: ");
-        scanner = Keyboard.getInstance();
-        scanner.nextLine();
+        System.out.println("\nMarcar 1: DNI");
+        System.out.println("\nMarcar 2: Pasaporte");
+        System.out.println("\nMarcar 3: CUIL");
+        System.out.println("\nMarcar 4: DNI Extranjero");
+        data.put("documentation_type", scanner.nextLine());
 
         System.out.println("\nIngrese su número de documento: ");
-        scanner = Keyboard.getInstance();
-        scanner.nextInt();
-        scanner.nextLine();
+        data.put("number_doc", scanner.nextLine());
 
         System.out.println("\nIngrese su número de celular: ");
-        scanner = Keyboard.getInstance();
+        data.put("number_phone", scanner.nextLine());
         scanner.nextInt();
-        scanner.nextLine();
 
-        while (true) {
+
+        //HAY QUE ARREGLAR EL TR CATCH - VLADIMIR DIJO QUE NOS AYUDARIA PARA VER COMO LEIA LO QUE ESCRIBIERA SCANNER
+        /*while (true) {
             try {
                 String person = scanner.nextLine().trim();
                 while (!person.matches("^[A-Za-záéíóúüÁÉÍÓÚÜ\\s]+$") && !person.isEmpty()) {
@@ -45,7 +49,9 @@ public class PersonView {
             } catch (InputMismatchException e) {
                 System.out.println("Error, debe ingresar un dato válido");
             }
-        }
+        }*/
+
+        return data;
     }
 
     public void clientAlreadyExists(String name, String lastName, Integer numberDoc) {
@@ -57,6 +63,11 @@ public class PersonView {
         System.out.println("Los datos ingresados son -> \nNombre completo: " + name +
                 "\nApellido: " + lastName +
                 "\nNúmero de documento: " + numberDoc);
+        Keyboard.pressEnterToContinue();
+    }
+
+    public void updatePersonCanceled() {
+        System.out.println("Ha cancelado la actualizacion del siguiente usuario \n");
         Keyboard.pressEnterToContinue();
     }
 

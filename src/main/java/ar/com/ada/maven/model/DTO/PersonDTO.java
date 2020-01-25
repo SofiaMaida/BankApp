@@ -13,6 +13,12 @@ public class PersonDTO {
         this.name = name;
     }
 
+    public PersonDTO(Integer id, int number_doc) {
+        this.id = id;
+        this.number_doc = number_doc;
+
+    }
+
     public PersonDTO(Integer id, String name, String lastName){
         this.id = id;
         this.name = name;
@@ -21,6 +27,12 @@ public class PersonDTO {
 
     public PersonDTO(Integer id, String name, String lastName, int number_doc){
         this.id = id;
+        this.name = name;
+        this.lastName = lastName;
+        this.number_doc = number_doc;
+    }
+
+    public PersonDTO(String name, String lastName, int number_doc){
         this.name = name;
         this.lastName = lastName;
         this.number_doc = number_doc;

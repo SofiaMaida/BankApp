@@ -1,5 +1,6 @@
 package ar.com.ada.maven.model.DAO;
 
+import ar.com.ada.maven.model.DBConnection;
 import ar.com.ada.maven.model.DTO.ContactDTO;
 import ar.com.ada.maven.model.DTO.PersonDTO;
 

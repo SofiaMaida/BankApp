@@ -150,9 +150,28 @@ public class PersonDAO implements DAO<PersonDTO> {
             if (rs.next())  total = rs.getInt("total");
             connection.close();
         } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
-            System.out.println("CONNECTION ERROR GETTOTALCONTINENTS PERSONS: " + e.getMessage());
+            System.out.println("CONNECTION ERROR GET TOTAL PERSONS: " + e.getMessage());
         }
 
         return total;
+    }
+
+    public PersonDTO findByDni(int number_doc){
+        String sql = "SELECT * FROM person WHERE number_doc = ?";
+        PersonDTO numberDni = null;
+        try {
+            Connection conn = DBConnection.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1, number_doc);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next())
+                numberDni = new PersonDTO(rs.getInt("id"), rs.getInt("number_doc"));
+            if (willCloseConnection)
+                conn.close();
+
+        } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+            System.out.println("CONNECTION ERROR: " + e.getMessage());
+        }
+        return numberDni;
     }
 }

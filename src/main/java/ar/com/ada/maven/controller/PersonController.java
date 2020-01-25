@@ -1,17 +1,24 @@
 package ar.com.ada.maven.controller;
 
+import ar.com.ada.maven.model.DAO.ContactDAO;
+import ar.com.ada.maven.model.DAO.DocumentationDAO;
 import ar.com.ada.maven.model.DAO.PersonDAO;
+import ar.com.ada.maven.model.DTO.ContactDTO;
+import ar.com.ada.maven.model.DTO.DocumentationDTO;
 import ar.com.ada.maven.model.DTO.PersonDTO;
 import ar.com.ada.maven.utils.Paginator;
 import ar.com.ada.maven.view.MainView;
 import ar.com.ada.maven.view.PersonView;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class PersonController {
 
     private static PersonView view = new PersonView();
     private static PersonDAO personDAO = new PersonDAO();
+    private static DocumentationDAO docDAO = new DocumentationDAO();
+    private static ContactDAO contactDAO = new ContactDAO();
 
     public static void init() {
         boolean shouldGetOut = false;
@@ -33,22 +40,32 @@ public class PersonController {
     }
 
     public static void createNewClient() {
-        String clientName = view.getNewClient();
-        if (!clientName.isEmpty()) {
-            PersonDTO newPerson = new PersonDTO(clientName);
-            PersonDTO byName = personDAO.findById(1);
-            PersonDTO byLastName = personDAO.findById(1);
-            PersonDTO byNumberDoc = personDAO.findById(1);
+        HashMap<String, String> client = view.getNewClient();
 
-            if (byName != null && byName.getName().equals(newPerson.getName()) &&
-                    byLastName != null && byLastName.getLastName().equals(newPerson.getLastName()) &&
-                    byNumberDoc != null && byNumberDoc.getNumber_doc().equals(newPerson.getNumber_doc())) {
+
+        if (!client.isEmpty()) {
+
+            int number_doc = Integer.parseInt(client.get("number_doc"));
+            int type_doc = Integer.parseInt(client.get("documentation_type"));
+
+            PersonDTO newPerson = new PersonDTO(client.get("name"), client.get("lastName"),number_doc);
+            PersonDTO byNumberDoc = personDAO.findByDni(number_doc);
+            // como mostrar los tipos de documento
+            DocumentationDTO type = docDAO.findById(type_doc);
+            if (byNumberDoc != null) {
                 view.clientAlreadyExists(newPerson.getName(), newPerson.getLastName(), newPerson.getNumber_doc());
-            } else {
-                Boolean isSaved = personDAO.save(newPerson);
-                if (isSaved)
-                    view.showNewClient(newPerson.getName(), newPerson.getLastName(), newPerson.getNumber_doc());
             }
+
+             else {
+                Boolean isSaved = personDAO.save(newPerson);
+                if (isSaved) {
+                    view.showNewClient(newPerson.getName(), newPerson.getLastName(), newPerson.getNumber_doc());
+                } else {
+                    view.updatePersonCanceled();
+                }
+            }
+        } else {
+            view.updatePersonCanceled();
         }
     }
 
@@ -58,7 +75,7 @@ public class PersonController {
         view.printAllPerson(person);
     }
 
-    public static int personListPerPage(String optionSelectedEdithOrDelete, boolean showHeader) {
+    public static int personListPerPage(String optionSelectedEditOrDelete, boolean showHeader) {
         int limit = 3, currentPage = 0, totalPages, totalPersons, personIdSelected = 0;
         List<PersonDTO> person = null;
         Boolean shouldGetOut = false;
@@ -69,7 +86,7 @@ public class PersonController {
             totalPages = (int) Math.ceil((double) totalPersons / limit);
             paginator = Paginator.buildPaginator(currentPage, totalPages);
 
-            String choice = view.printPersonPerPage(person, paginator, optionSelectedEdithOrDelete, showHeader);
+            String choice = view.printPersonPerPage(person, paginator, optionSelectedEditOrDelete, showHeader);
             switch (choice) {
                 case "i":
                 case "I":
@@ -92,8 +109,8 @@ public class PersonController {
                 case "e":
                 case "E":
                     boolean shouldtGetOut;
-                    if (optionSelectedEdithOrDelete != null) {
-                        personIdSelected = view.personIdSelected(optionSelectedEdithOrDelete);
+                    if (optionSelectedEditOrDelete != null) {
+                        personIdSelected = view.personIdSelected(optionSelectedEditOrDelete);
                         shouldtGetOut = true;
                     }
                 case "q":
