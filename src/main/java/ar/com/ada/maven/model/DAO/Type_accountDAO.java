@@ -1,9 +1,6 @@
 package ar.com.ada.maven.model.DAO;
 
-import ar.com.ada.maven.DBConnection;
 import ar.com.ada.maven.model.DTO.AccountDTO;
-import ar.com.ada.maven.model.DTO.DocumentationDTO;
-import ar.com.ada.maven.model.DTO.PersonDTO;
 import ar.com.ada.maven.model.DTO.Type_accountDTO;
 
 import java.sql.*;
