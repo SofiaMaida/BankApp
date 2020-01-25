@@ -12,5 +12,5 @@ public interface DAO <T> {
     Boolean save( T t);
     Boolean update( T t, Integer id);
     Boolean delete (Integer id);
-    
+
 }

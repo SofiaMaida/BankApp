@@ -1,14 +1,16 @@
 package ar.com.ada.maven.model.DTO;
 
+import ar.com.ada.maven.model.DAO.DocumentationDAO;
+
 import java.util.Objects;
 
 public class BalanceDTO {
 
     private int id;
-    private int balance;
+    private Double balance;
     private AccountDTO account;
 
-    public BalanceDTO(int id, int balance, AccountDTO account) {
+    public BalanceDTO(int id, Double balance, AccountDTO account) {
         this.id = id;
         this.balance = balance;
         this.account = account;
@@ -22,11 +24,11 @@ public class BalanceDTO {
         this.id = id;
     }
 
-    public int getBalance() {
+    public Double getBalance() {
         return balance;
     }
 
-    public void setBalance(int balance) {
+    public void setBalance(Double balance) {
         this.balance = balance;
     }
 
