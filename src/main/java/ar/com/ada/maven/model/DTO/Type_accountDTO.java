@@ -1,4 +1,4 @@
 package ar.com.ada.maven.model.DTO;
 
-public class Person {
+public class Type_accountDTO {
 }
