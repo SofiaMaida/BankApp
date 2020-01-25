@@ -11,8 +11,8 @@ public class BalanceDAO implements DAO<BalanceDTO> {
 
     private Boolean willCloseConnection = true;
     public AccountDAO accountDAO = new AccountDAO(false);
+
     public BalanceDAO(boolean b) {}
-    public BalanceDAO(){}
 
     @Override
     public ArrayList<BalanceDTO> findAll() {

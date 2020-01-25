@@ -11,7 +11,7 @@ import java.util.List;
 public class DocumentationDAO implements DAO<DocumentationDTO> {
 
     private Boolean willCloseConnection = true;
-    private PersonDAO perDAO = new PersonDAO();
+
 
     public DocumentationDAO (){}
 
@@ -27,9 +27,8 @@ public class DocumentationDAO implements DAO<DocumentationDTO> {
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(sql);
             while(rs.next()){
-                PersonDTO person = perDAO.findById(rs.getInt("documentation_id"));
                 DocumentationDTO doc = new DocumentationDTO(rs.getInt("id"),
-                        rs.getString("documentation_type"), person);
+                        rs.getString("documentation_type"));
                 docs.add(doc);
             }
 
@@ -49,9 +48,8 @@ public class DocumentationDAO implements DAO<DocumentationDTO> {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()){
-                PersonDTO person = perDAO.findById(rs.getInt("person_id"));
-            docum = new DocumentationDTO(rs.getInt("id"), rs.getString("documentation_type"),
-                    person);}
+            docum = new DocumentationDTO(rs.getInt("id"), rs.getString("documentation_type"));
+            }
             if (willCloseConnection)
                 conn.close();
         } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {

@@ -15,10 +15,7 @@ public class Type_movementsDAO implements DAO<Type_movementsDTO> {
         this.willCloseConnection = willCloseConnection;
     }
 
-    public Type_movementsDAO() {
-    }
-
-    @Override
+        @Override
     public Collection<Type_movementsDTO> findAll() {
         String sql = "SELECT * FROM Type_movements";
         ArrayList<Type_movementsDTO> type_movements = new ArrayList<>();

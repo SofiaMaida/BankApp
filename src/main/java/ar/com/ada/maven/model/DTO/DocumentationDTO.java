@@ -4,7 +4,7 @@ public class DocumentationDTO {
 
     private Integer id;
     private String documentation_type;
-    private PersonDTO person;
+
 
     public DocumentationDTO(){
 
@@ -15,11 +15,6 @@ public class DocumentationDTO {
         this.documentation_type = documentation_type;
     }
 
-    public DocumentationDTO(Integer id, String documentation_type, PersonDTO person){
-        this.id = id;
-        this.documentation_type = documentation_type;
-        this.person = person;
-    }
 
     public void setId(Integer id) {
         this.id = id;
@@ -29,13 +24,6 @@ public class DocumentationDTO {
         return id;
     }
 
-    public void setPerson(PersonDTO person) {
-        this.person = person;
-    }
-
-    public PersonDTO getPerson() {
-        return person;
-    }
 
     public String getDocumentation_type() {
         return documentation_type;
@@ -47,12 +35,12 @@ public class DocumentationDTO {
 
     @Override
     public String toString() {
-        return "Documentacion: [-id: " + id + " - Tipo de documento: " + documentation_type + " - persona: " + person +"]";
+        return "Documentacion: [-id: " + id + " - Tipo de documento: " + documentation_type + "]";
     }
 
     @Override
     public int hashCode() {
-        return -234 * id.hashCode() + documentation_type.hashCode() + person.hashCode();
+        return -234 * id.hashCode() + documentation_type.hashCode();
     }
 
     @Override
@@ -60,6 +48,6 @@ public class DocumentationDTO {
         if (this == obj) return true;
         if (obj == null || getClass() != obj.getClass()) return false;
         DocumentationDTO that = (DocumentationDTO) obj;
-        return id.equals(that.id) && documentation_type.equals(that.documentation_type) && person.equals(that.person);
+        return id.equals(that.id) && documentation_type.equals(that.documentation_type);
     }
 }

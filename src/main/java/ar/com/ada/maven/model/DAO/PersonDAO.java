@@ -1,6 +1,7 @@
 package ar.com.ada.maven.model.DAO;
 
 import ar.com.ada.maven.model.DBConnection;
+import ar.com.ada.maven.model.DTO.DocumentationDTO;
 import ar.com.ada.maven.model.DTO.PersonDTO;
 
 import java.sql.*;
@@ -10,6 +11,7 @@ import java.util.List;
 public class PersonDAO implements DAO<PersonDTO> {
 
     private Boolean willCloseConnection = true;
+    private DocumentationDAO docDAO = new DocumentationDAO(false);
 
     public PersonDAO() {
     }
@@ -26,9 +28,10 @@ public class PersonDAO implements DAO<PersonDTO> {
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(sql);
             while (rs.next()) {
+                DocumentationDTO type_doc = docDAO.findById(rs.getInt("documentation_id"));
                 PersonDTO person = new PersonDTO(rs.getInt("id"),
                         rs.getString("name"), rs.getString("lastName"),
-                        rs.getInt("number_doc"));
+                        rs.getInt("number_doc"), type_doc);
                 persons.add(person);
             }
 
@@ -48,9 +51,11 @@ public class PersonDAO implements DAO<PersonDTO> {
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1,id);
             ResultSet rs = ps.executeQuery();
-            if (rs.next())
-                person = new PersonDTO(rs.getInt("id"),rs.getString("name"),
-                        rs.getString("lastName"),rs.getInt("number_doc"));
+            if (rs.next()) {
+                DocumentationDTO type = docDAO.findById(rs.getInt("documentation_id"));
+                person = new PersonDTO(rs.getInt("id"), rs.getString("name"),
+                        rs.getString("lastName"), rs.getInt("number_doc"), type);
+            }
             if (willCloseConnection)
                 conn.close();
         } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
@@ -70,6 +75,7 @@ public class PersonDAO implements DAO<PersonDTO> {
             ps.setString(1,personDTO.getName());
             ps.setString(2,personDTO.getLastName());
             ps.setInt(3,personDTO.getNumber_doc());
+            ps.setInt(4,personDTO.getDocument_type().getId());
             hasInsert = ps.executeUpdate();
             conn.close();
         } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
@@ -128,8 +134,9 @@ public class PersonDAO implements DAO<PersonDTO> {
             preparedStatement.setInt(2, offset);
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
+                DocumentationDTO type_doc = docDAO.findById(rs.getInt("documentation_id"));
                 PersonDTO personDTO = new PersonDTO(rs.getInt("id"), rs.getString("name"), rs.getString("last_name"),
-                        rs.getInt("number_doc"));
+                        rs.getInt("number_doc"), type_doc);
                 person.add(personDTO);
             }
             connection.close();

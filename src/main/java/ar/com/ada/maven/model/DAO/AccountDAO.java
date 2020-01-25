@@ -3,6 +3,7 @@ package ar.com.ada.maven.model.DAO;
 import ar.com.ada.maven.model.DBConnection;
 import ar.com.ada.maven.model.DTO.AccountDTO;
 import ar.com.ada.maven.model.DTO.PersonDTO;
+import ar.com.ada.maven.model.DTO.Type_accountDTO;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -11,6 +12,7 @@ public class AccountDAO implements DAO<AccountDTO> {
 
     private Boolean willCloseConnection = true;
     public PersonDAO personDAO = new PersonDAO(false);
+    public Type_accountDAO typeDAO = new Type_accountDAO(false);
 
     public AccountDAO(boolean b) {}
 
@@ -26,7 +28,8 @@ public class AccountDAO implements DAO<AccountDTO> {
             ResultSet rs = statement.executeQuery(sql);
             while (rs.next()) {
                 PersonDTO person = personDAO.findById(rs.getInt("Person_id"));
-                AccountDTO accountDTO = new AccountDTO(rs.getInt("id"), rs.getInt("number_account"), person);
+                Type_accountDTO type_account = typeDAO.findById(rs.getInt("type_account_id"));
+                AccountDTO accountDTO = new AccountDTO(rs.getInt("id"), rs.getInt("number_account"), person, type_account);
                 account.add(accountDTO);
             }
             if (willCloseConnection)
@@ -48,7 +51,8 @@ public class AccountDAO implements DAO<AccountDTO> {
             ResultSet rs = preparedStatement.executeQuery();
             if (rs.next()) {
                 PersonDTO person = personDAO.findById(rs.getInt("Person_id"));
-                account = new AccountDTO(rs.getInt("id"), rs.getInt("number_account"), person);
+                Type_accountDTO typeDTO = typeDAO.findById(rs.getInt("type_account_id"));
+                account = new AccountDTO(rs.getInt("id"), rs.getInt("number_account"), person, typeDTO);
             }
             if (willCloseConnection) connection.close();
 
@@ -67,6 +71,7 @@ public class AccountDAO implements DAO<AccountDTO> {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, accountDTO.getNumber_account());
             preparedStatement.setInt(2, accountDTO.getPerson().getId());
+            preparedStatement.setInt(3,accountDTO.getType_account().getId());
             affectedRows = preparedStatement.executeUpdate();
             connection.close();
         } catch (Exception e) {
@@ -85,9 +90,10 @@ public class AccountDAO implements DAO<AccountDTO> {
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, accountDTO.getNumber_account());
             preparedStatement.setInt(2, accountDTO.getPerson().getId());
+            preparedStatement.setInt(3,accountDTO.getType_account().getId());
 
             if (!(accountDTO.getNumber_account().equals(accountDB.getNumber_account()) &&
-                    accountDTO.getPerson().equals(accountDB.getPerson())));
+                    accountDTO.getPerson().equals(accountDB.getPerson()) && accountDTO.getType_account().equals(accountDB.getType_account())));
             hasUpdate = preparedStatement.executeUpdate();
             if (willCloseConnection) connection.close();
         } catch (Exception e) {

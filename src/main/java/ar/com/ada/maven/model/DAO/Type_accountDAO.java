@@ -12,7 +12,6 @@ import java.util.List;
 public class Type_accountDAO implements DAO<Type_accountDTO> {
 
     private Boolean willCloseConnection = true;
-    private AccountDAO accoDAO = new AccountDAO(false);
 
     public Type_accountDAO(){}
 
@@ -29,9 +28,9 @@ public class Type_accountDAO implements DAO<Type_accountDTO> {
             Statement st = conn.createStatement();
             ResultSet rs = st.executeQuery(sql);
             while(rs.next()){
-                AccountDTO account = accoDAO.findById(rs.getInt("account_id"));
+
                 Type_accountDTO type = new Type_accountDTO(rs.getInt("id"),
-                        rs.getString("type"), account);
+                        rs.getString("type"));
                 types.add(type);
             }
 
@@ -52,9 +51,8 @@ public class Type_accountDAO implements DAO<Type_accountDTO> {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()){
-                AccountDTO account = accoDAO.findById(rs.getInt("account_id"));
-                type = new Type_accountDTO(rs.getInt("id"), rs.getString("type"),
-                        account);}
+
+                type = new Type_accountDTO(rs.getInt("id"), rs.getString("type"));}
             if (willCloseConnection)
                 conn.close();
         } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
@@ -90,9 +88,7 @@ public class Type_accountDAO implements DAO<Type_accountDTO> {
             Connection conn = DBConnection.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1,type_accountDTO.getType());
-            ps.setInt(2, type_accountDTO.getAccount().getId());
-            if (!type_accountDTO.getType().equals(typeDTO.getType())
-                    && type_accountDTO.getAccount().equals(typeDTO.getAccount()));
+            if (!type_accountDTO.getType().equals(typeDTO.getType()));
             hasUpdate = ps.executeUpdate();
             conn.close();
         } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {

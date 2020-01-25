@@ -13,7 +13,6 @@ public class TransactionDAO implements DAO<TransactionDTO> {
     private Boolean willCloseConnection = true;
     public MovementsDAO movementsDAO = new MovementsDAO(false);
     public TransactionDAO(boolean b) {}
-    public TransactionDAO(){}
 
     @Override
     public ArrayList<TransactionDTO> findAll() {
