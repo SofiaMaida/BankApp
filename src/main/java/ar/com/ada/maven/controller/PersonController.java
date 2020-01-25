@@ -6,11 +6,15 @@ import ar.com.ada.maven.model.DAO.PersonDAO;
 import ar.com.ada.maven.model.DTO.ContactDTO;
 import ar.com.ada.maven.model.DTO.DocumentationDTO;
 import ar.com.ada.maven.model.DTO.PersonDTO;
+import ar.com.ada.maven.utils.Ansi;
 import ar.com.ada.maven.utils.Paginator;
-import ar.com.ada.maven.view.MainView;
 import ar.com.ada.maven.view.PersonView;
 
+<<<<<<< HEAD
 import java.util.HashMap;
+=======
+import java.util.ArrayList;
+>>>>>>> View
 import java.util.List;
 
 public class PersonController {
@@ -31,7 +35,13 @@ public class PersonController {
                     break;
                 case "b":
                     personList();
+                    break;
+                case "c":
+                    edithPerson();
+                    break;
                 case "d":
+                    deletePerson();
+                case "f":
                     shouldGetOut = true;
                 default:
                     System.out.println("Opción no valida, vuelva a seleccionar");
@@ -65,28 +75,104 @@ public class PersonController {
                 }
             }
         } else {
+<<<<<<< HEAD
             view.updatePersonCanceled();
+=======
+            view.newClientCanceled();
+>>>>>>> View
         }
     }
 
     public static void personList() {
-        int i = personListPerPage(null, true);
         List<PersonDTO> person = personDAO.findAll();
         view.printAllPerson(person);
     }
 
+<<<<<<< HEAD
     public static int personListPerPage(String optionSelectedEditOrDelete, boolean showHeader) {
         int limit = 3, currentPage = 0, totalPages, totalPersons, personIdSelected = 0;
         List<PersonDTO> person = null;
         Boolean shouldGetOut = false;
+=======
+    private static void edithPerson() {
+        int personIdToEdith = personListPerPage(true);
+        if (personIdToEdith != 0)
+            editSelectedPerson(personIdToEdith);
+        else
+            view.updatePersonCanceled();
+    }
+
+    private static void editSelectedPerson(int id) {
+        PersonDTO person = personDAO.findById(id);
+        if (person != null) {
+            String nameToUpdate = view.getDataUpdate(person);
+
+            if (!nameToUpdate.isEmpty()) {
+                personDAO.findByDni(nameToUpdate);
+                person.setNumber_doc(nameToUpdate);
+                Boolean isSaved = personDAO.update(person, id);
+                if (isSaved)
+                    view.showUpdateData(person.getName(), person.getLastName(), person.getNumber_doc());
+            } else
+                view.updatePersonCanceled();
+        } else {
+            view.personNotExist(id);
+            int personIdSelected = view.personIdSelected("Editar");
+            if (personIdSelected != 0) {
+                editSelectedPerson(personIdSelected);
+            } else
+                view.updatePersonCanceled();
+        }
+    }
+
+    private static void deletePerson() {
+        int personIdToDelete = personListPerPage(false);
+        if (personIdToDelete != 0)
+            deleteSelectedPerson(personIdToDelete);
+        else
+            view.updatePersonCanceled();
+    }
+
+    private static void deleteSelectedPerson(int id) {
+        PersonDTO person = personDAO.findById(id);
+        if (person != null) {
+            Boolean nameDelete = view.getNameDelete(person);
+            if (nameDelete) {
+                Boolean isDelete = personDAO.delete(id);
+                if (isDelete)
+                    view.showDeletePerson(person.getName(), person.getLastName(), person.getNumber_doc());
+            } else
+                view.deletePersonCanceled();
+        } else {
+            view.personNotExist(id);
+            int personIdSelected = view.personIdSelected("Eliminar");
+            if (personIdSelected != 0) {
+                deleteSelectedPerson(personIdSelected);
+            } else
+                view.deletePersonCanceled();
+        }
+
+    }
+
+    private static int personListPerPage(boolean hasEdith) {
+        int limit = 3, currentPage = 0, numberPersons, totalPages;
+        List<PersonDTO> person;
+>>>>>>> View
         List<String> paginator;
+        Boolean shouldGetOut = false;
 
         while (!shouldGetOut) {
-            totalPersons = personDAO.getTotalPersons();
-            totalPages = (int) Math.ceil((double) totalPersons / limit);
-            paginator = Paginator.buildPaginator(currentPage, totalPages);
+            numberPersons = personDAO.getTotalPersons();
+            totalPages = (int) Math.ceil((double) numberPersons / limit);
+            paginator = buildPaginator(currentPage, totalPages);
 
+            person = personDAO.findAll(limit, currentPage * limit);
+            String choice = view.printPersonPerPage(person, paginator, hasEdith);
+
+<<<<<<< HEAD
             String choice = view.printPersonPerPage(person, paginator, optionSelectedEditOrDelete, showHeader);
+=======
+>>>>>>> View
             switch (choice) {
                 case "i":
                 case "I":
@@ -108,26 +194,50 @@ public class PersonController {
                     break;
                 case "e":
                 case "E":
+<<<<<<< HEAD
                     boolean shouldtGetOut;
                     if (optionSelectedEditOrDelete != null) {
                         personIdSelected = view.personIdSelected(optionSelectedEditOrDelete);
                         shouldtGetOut = true;
                     }
+=======
+                    String action = (hasEdith) ? "Editar" : "Eliminar";
+                    return view.personIdSelected(action);
+>>>>>>> View
                 case "q":
                 case "Q":
-                    shouldtGetOut = true;
+                    shouldGetOut = true;
                     break;
                 default:
                     if (choice.matches("^-?\\d+$")) {
                         int page = Integer.parseInt(choice);
                         if (page > 0 && page <= totalPages) currentPage = page - 1;
-                    } else MainView.chooseValidOption();
+                    } else
+                        System.out.println("Error, debe ingresar una opcion valida");
             }
         }
-        return personIdSelected;
+        return 0;
     }
 
-}
+    private static List<String> buildPaginator(int currentPage, int totalPages) {
+        List<String> pages = new ArrayList<>();
+        pages.add("[" + Ansi.CYAN + "I" + Ansi.RESET + "nicio]");
+        pages.add("[" + Ansi.CYAN + "A" + Ansi.RESET + "nterior]");
+
+        for (int i = 1; i <= totalPages; i++) {
+            if (i == currentPage + 1)
+                pages.add(Ansi.YELLOW + "[" + i + "]" + Ansi.RESET);
+            else
+                pages.add("[" + i + "]");
+        }
+
+        pages.add("[" + Ansi.CYAN + "S" + Ansi.RESET + "iguiente]");
+        pages.add("[" + Ansi.CYAN + "U" + Ansi.RESET + "ltimo]");
+        pages.add("");
+        pages.add("[" + Ansi.CYAN + "Q" + Ansi.RESET + " para salir]");
+
+        return pages;
+    }
 
     /*public static void createNewAccount() {
         String accountNumber = view.getNewTypeAccount();
@@ -146,3 +256,4 @@ public class PersonController {
         }
 
     }*/
+}
