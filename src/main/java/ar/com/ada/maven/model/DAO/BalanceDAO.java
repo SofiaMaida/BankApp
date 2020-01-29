@@ -2,69 +2,69 @@ package ar.com.ada.maven.model.DAO;
 
 import ar.com.ada.maven.model.DBConnection;
 import ar.com.ada.maven.model.DTO.AccountDTO;
-import ar.com.ada.maven.model.DTO.PersonDTO;
+import ar.com.ada.maven.model.DTO.BalanceDTO;
 
 import java.sql.*;
 import java.util.ArrayList;
 
-public class AccountDAO implements DAO<AccountDTO> {
+public class BalanceDAO implements DAO<BalanceDTO> {
 
     private Boolean willCloseConnnection = true;
-    public PersonDAO personDAO = new PersonDAO(false);
-    public AccountDAO(boolean b) {}
-    public AccountDAO(){}
+    public AccountDAO accountDAO = new AccountDAO(false);
+    public BalanceDAO(boolean b) {}
+    public BalanceDAO(){}
 
     @Override
-    public ArrayList<AccountDTO> findAll() {
-        String sql = "SELECT * FROM Account";
-        ArrayList<AccountDTO> account = new ArrayList<>();
+    public ArrayList<BalanceDTO> findAll() {
+        String sql = "SELECT * FROM Balance";
+        ArrayList<BalanceDTO> balance = new ArrayList<>();
         try {
             Connection connection = DBConnection.getConnection();
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(sql);
             while (rs.next()) {
-                PersonDTO person = personDAO.findById(rs.getInt("Person_id"));
-                AccountDTO accountDTO = new AccountDTO(rs.getInt("id"), rs.getInt("number_account"), person);
-                account.add(accountDTO);
+                AccountDTO account = accountDAO.findById(rs.getInt("Account_id"));
+                BalanceDTO balanceDTO = new BalanceDTO(rs.getInt("id"), rs.getDouble("balance"), account);
+                balance.add(balanceDTO);
             }
             if (willCloseConnnection)
                 connection.close();
         } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
-            System.out.println("CONNECTION ERROR FINDALL ACCOUNT: " + e.getMessage());
+            System.out.println("CONNECTION ERROR FINDALL BALANCE: " + e.getMessage());
         }
-        return account;
+        return balance;
     }
 
     @Override
-    public AccountDTO findById(Integer id) {
-        String sql = "SELECT * FROM Account WHERE id = ?";
-        AccountDTO account = null;
+    public BalanceDTO findById(Integer id) {
+        String sql = "SELECT * FROM Balance WHERE id = ?";
+        BalanceDTO balance = null;
         try {
             Connection connection = DBConnection.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1, id);
             ResultSet rs = preparedStatement.executeQuery();
             if (rs.next()) {
-                PersonDTO person = personDAO.findById(rs.getInt("Person_id"));
-                account = new AccountDTO(rs.getInt("id"), rs.getInt("number_account"), person);
+                AccountDTO account = accountDAO.findById(rs.getInt("Account_id"));
+                balance = new BalanceDTO(rs.getInt("id"), rs.getDouble("balance"), account);
             }
             if (willCloseConnnection) connection.close();
 
         } catch (Exception e) {
-            System.out.println("CONNECTION ERROR FINDBYID ACCOUNT: " + e.getMessage());
+            System.out.println("CONNECTION ERROR FINDBYID BALANCE: " + e.getMessage());
         }
-        return account;
+        return balance;
     }
 
     @Override
-    public Boolean save(AccountDTO accountDTO) {
-        String sql = "INSERT INTO Account (number_account, person_id) values (?, ?)";
+    public Boolean save(BalanceDTO balanceDTO) {
+        String sql = "INSERT INTO Balance (balance, account_id) values (?, ?)";
         int affectedRows = 0;
         try {
             Connection connection = DBConnection.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, accountDTO.getNumber_account());
-            preparedStatement.setInt(2, accountDTO.getPerson().getId());
+            preparedStatement.setDouble(1, balanceDTO.getBalance());
+            preparedStatement.setInt(2, balanceDTO.getAccount().getId());
             affectedRows = preparedStatement.executeUpdate();
             connection.close();
         } catch (Exception e) {
@@ -74,29 +74,29 @@ public class AccountDAO implements DAO<AccountDTO> {
     }
 
     @Override
-    public Boolean update(AccountDTO accountDTO, Integer id) {
-        String sql = "UPDATE Account SET number_account = ?, person_id = ?";
+    public Boolean update(BalanceDTO balanceDTO, Integer id) {
+        String sql = "UPDATE Balance SET balance = ?, account_id = ?";
         int hasUpdate = 0;
-        AccountDTO accountDB = findById(id);
+        BalanceDTO balanceDB = findById(id);
         try {
             Connection connection = DBConnection.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, accountDTO.getNumber_account());
-            preparedStatement.setInt(2, accountDTO.getPerson().getId());
+            preparedStatement.setDouble(1, balanceDTO.getBalance());
+            preparedStatement.setInt(2, balanceDTO.getAccount().getId());
 
-            if (!(accountDTO.getNumber_account().equals(accountDB.getNumber_account()) &&
-                    accountDTO.getPerson().equals(accountDB.getPerson())));
+            if (!(balanceDTO.getBalance().equals(balanceDB.getBalance()) &&
+                    balanceDTO.getAccount().equals(balanceDB.getAccount())));
             hasUpdate = preparedStatement.executeUpdate();
             if (willCloseConnnection) connection.close();
         } catch (Exception e) {
-            System.out.println("CONNECTION ERROR UPDATE ACCOUNT: " + e.getMessage());
+            System.out.println("CONNECTION ERROR UPDATE BALANCE: " + e.getMessage());
         }
         return hasUpdate == 1;
     }
 
     @Override
     public Boolean delete(Integer id) {
-        String sql = "DELETE FROM Account WHERE id = ?";
+        String sql = "DELETE FROM Balance WHERE id = ?";
         int hasDelete = 0;
         try {
             Connection connection = DBConnection.getConnection();
@@ -104,7 +104,7 @@ public class AccountDAO implements DAO<AccountDTO> {
             preparedStatement.setInt(1, id);
             hasDelete = preparedStatement.executeUpdate();
         } catch (Exception e) {
-            System.out.println("CONNECTION ERROR DELETE ACCOUNT: " + e.getMessage());
+            System.out.println("CONNECTION ERROR DELETE BALANCE: " + e.getMessage());
         }
         return hasDelete == 1;
     }

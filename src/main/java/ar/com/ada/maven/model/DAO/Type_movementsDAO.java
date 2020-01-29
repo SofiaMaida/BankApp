@@ -2,7 +2,6 @@ package ar.com.ada.maven.model.DAO;
 
 import ar.com.ada.maven.model.DBConnection;
 import ar.com.ada.maven.model.DTO.Type_movementsDTO;
-import com.sun.org.apache.xml.internal.dtm.ref.DTMDefaultBase;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -19,7 +18,6 @@ public class Type_movementsDAO implements DAO<Type_movementsDTO> {
     public Type_movementsDAO() {
     }
 
-
     @Override
     public Collection<Type_movementsDTO> findAll() {
         String sql = "SELECT * FROM Type_movements";
@@ -27,7 +25,7 @@ public class Type_movementsDAO implements DAO<Type_movementsDTO> {
         try {
             Connection connection = DBConnection.getConnection();
             Statement statement = connection.createStatement();
-            ResultSet rs = statement.executeQuery();
+            ResultSet rs = statement.executeQuery(sql);
             while (rs.next()) {
                 Type_movementsDTO type_movementsDTO = new Type_movementsDTO(rs.getInt("id"), rs.getString("type_move"));
                 type_movements.add(type_movementsDTO);
@@ -42,7 +40,7 @@ public class Type_movementsDAO implements DAO<Type_movementsDTO> {
     }
 
     @Override
-    public Type_movementsDTO findBId(Integer id) {
+    public Type_movementsDTO findById(Integer id) {
         String sql = "SELECT* FROM Type_movements WHERE id = ?";
         Type_movementsDTO type_movements = null;
         try {
@@ -81,14 +79,35 @@ public class Type_movementsDAO implements DAO<Type_movementsDTO> {
     public Boolean update(Type_movementsDTO type_movementsDTO, Integer id) {
         String sql = "UPDATE Type_movements SET type_move ? WHERE id = ?";
         int hasUpdate = 0;
+        Type_movementsDTO type_movementsDB = findById(id);
 
+        try {
+            Connection connection = DBConnection.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setString(1, type_movementsDTO.getType_move());
+            preparedStatement.setInt(2, id);
 
-
-        return null;
+            if (!type_movementsDTO.getType_move().equals(type_movementsDB.getType_move()))
+                hasUpdate = preparedStatement.executeUpdate();
+        } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+            System.out.println("CONNECTION ERROR UPDATE TYPEMOVE: " + e.getMessage());
+        }
+        return hasUpdate == 1;
     }
 
     @Override
     public Boolean delete(Integer id) {
-        return null;
+        String sql = "DELETE * FROM Type_movements WHERE type_move = ?";
+        int hasDelete = 0;
+        try {
+            Connection connection = DBConnection.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, id);
+
+            hasDelete = preparedStatement.executeUpdate();
+        } catch (Exception e) {
+            System.out.println("CONNECTION ERROR DELETE TYPEMOVE: " + e.getMessage());
+        }
+        return hasDelete == 1;
     }
 }

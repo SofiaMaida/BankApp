@@ -5,7 +5,7 @@ import java.util.Collection;
 
 public interface DAO <T> {
 
-    Collection<T> findAll() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException;
+    Collection<T> findAll();
 
     T findById(Integer id);
 
