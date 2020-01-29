@@ -7,7 +7,7 @@ public interface DAO <T> {
 
     Collection<T> findAll() throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException;
 
-    T findBId(Integer id);
+    T findById(Integer id);
 
     Boolean save( T t);
     Boolean update( T t, Integer id);
