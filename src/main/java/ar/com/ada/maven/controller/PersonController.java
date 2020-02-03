@@ -10,7 +10,7 @@ public class PersonController {
 
     private static PersonView view = new PersonView();
     private static PersonDAO personDAO = new PersonDAO();
-   // private static Type_accountDAO type_accountDAO = new Type_accountDAO();
+    // private static Type_accountDAO type_accountDAO = new Type_accountDAO();
 
     public static void init() {
         boolean shouldGetOut = false;
@@ -22,8 +22,8 @@ public class PersonController {
                     createNewClient();
                     break;
                 //case "b":
-                  //  createNewAccount();
-                    //break;
+                //  createNewAccount();
+                //break;
                 case "d":
                     shouldGetOut = true;
                 default:
