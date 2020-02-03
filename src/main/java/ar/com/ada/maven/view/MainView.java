@@ -32,6 +32,7 @@ public class MainView {
             }
         }
     }
+
     public static void chooseValidOption() {
         System.out.println("Error, debe ingresar un dato válido");
         System.out.println(Ansi.RESET);
