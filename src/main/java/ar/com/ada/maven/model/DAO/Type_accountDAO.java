@@ -69,17 +69,56 @@ public class Type_accountDAO implements DAO<Type_accountDTO> {
 
     @Override
     public Boolean save(Type_accountDTO type_accountDTO) {
-        return null;
+        String sql = "INSERT INTO type_account (type) VALUES (?)";
+        int hasInsert = 0;
+        try {
+            Connection conn = DBConnection.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, type_accountDTO.getType());
+            hasInsert = ps.executeUpdate();
+            conn.close();
+        } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+            System.out.println("CONNECTION ERROR: " + e.getMessage());
+        }
+        return hasInsert == 1;
     }
 
     @Override
     public Boolean update(Type_accountDTO type_accountDTO, Integer id) {
-        return null;
+        String sql = "UPDATE type_account SET type = ? WHERE id = ?";
+        int hasUpdate = 0;
+        Type_accountDTO typeDTO = findById(id);
+        try {
+            Connection conn = DBConnection.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1,type_accountDTO.getType());
+            ps.setInt(2, type_accountDTO.getAccount().getId());
+            if (!type_accountDTO.getType().equals(typeDTO.getType())
+                    && type_accountDTO.getAccount().equals(typeDTO.getAccount()));
+            hasUpdate = ps.executeUpdate();
+            conn.close();
+        } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+            System.out.println("CONNECTION ERROR: " + e.getMessage());
+        }
+
+        return hasUpdate ==1;
     }
 
     @Override
     public Boolean delete(Integer id) {
-        return null;
+        String sql = "DELETE FROM type_account WHERE id = ?";
+        int hasErased = 0;
+        try {
+            Connection conn = DBConnection.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1,id);
+            hasErased = ps.executeUpdate();
+            conn.close();
+        } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+            System.out.println("CONNECTION ERROR: " + e.getMessage());
+        }
+
+        return hasErased == 1;
     }
 }
 

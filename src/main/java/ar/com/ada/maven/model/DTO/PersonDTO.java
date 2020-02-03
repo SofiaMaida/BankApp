@@ -6,7 +6,7 @@ public class PersonDTO {
     private String name, lastName;
     private Integer number_doc;
 
-    public PersonDTO(){}
+    public PersonDTO(String clientName){}
 
     public PersonDTO(Integer id, String name){
         this.id = id;

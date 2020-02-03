@@ -1,5 +1,7 @@
 package ar.com.ada.maven;
 
+import ar.com.ada.maven.controller.MainController;
+
 /**
  * Hello world!
  *
@@ -7,7 +9,7 @@ package ar.com.ada.maven;
 public class App 
 {
     public static void main( String[] args ) {
-        System.out.println("Hello World!");
+        MainController.run();
 
 
 

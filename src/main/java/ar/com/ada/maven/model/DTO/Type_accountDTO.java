@@ -6,7 +6,7 @@ public class Type_accountDTO {
     private String type;
     private AccountDTO account;
 
-    public Type_accountDTO(){}
+    public Type_accountDTO(String accountNumber){}
 
     public Type_accountDTO(Integer id, String type){
         this.id = id;

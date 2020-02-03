@@ -26,7 +26,7 @@ public class TransactionDAO implements DAO<TransactionDTO> {
             while (rs.next()) {
                 MovementsDTO movements = movementsDAO.findById(rs.getInt("Movements_id"));
                 TransactionDTO transactionDTO = new TransactionDTO(rs.getInt("id"),
-                        rs.getInt("amount"), movements);
+                        rs.getDouble("amount"), movements);
                 transaction.add(transactionDTO);
             }
             if (willCloseConnection)
@@ -48,7 +48,7 @@ public class TransactionDAO implements DAO<TransactionDTO> {
             ResultSet rs = preparedStatement.executeQuery();
             if (rs.next()) {
                 MovementsDTO movements = movementsDAO.findById(rs.getInt("Movements_id"));
-                transaction = new TransactionDTO(rs.getInt("id"), rs.getInt("amount"), movements);
+                transaction = new TransactionDTO(rs.getInt("id"), rs.getDouble("amount"), movements);
             }
             if (willCloseConnection) connection.close();
 
@@ -65,7 +65,7 @@ public class TransactionDAO implements DAO<TransactionDTO> {
         try {
             Connection connection = DBConnection.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, transactionDTO.getAmount());
+            preparedStatement.setDouble(1, transactionDTO.getAmount());
             preparedStatement.setInt(2, transactionDTO.getMovements().getId());
             affectedRows = preparedStatement.executeUpdate();
             connection.close();
@@ -83,7 +83,7 @@ public class TransactionDAO implements DAO<TransactionDTO> {
         try {
             Connection connection = DBConnection.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, transactionDTO.getAmount());
+            preparedStatement.setDouble(1, transactionDTO.getAmount());
             preparedStatement.setInt(2, transactionDTO.getMovements().getId());
 
             if (!transactionDTO.getAmount().equals(transactionDB.getAmount())
