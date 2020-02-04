@@ -117,6 +117,29 @@ public class PersonDAO implements DAO<PersonDTO> {
         return hasErased == 1;
     }
 
+    public List<PersonDTO> findAll(int limit, int offset) {
+        String sql = "SELECT * FROM Person LIMIT ? OFFSET ?";
+        List<PersonDTO> person = new ArrayList<>();
+
+        try {
+            Connection connection = DBConnection.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, limit);
+            preparedStatement.setInt(2, offset);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                PersonDTO personDTO = new PersonDTO(rs.getInt("id"), rs.getString("name"), rs.getString("last_name"),
+                        rs.getInt("number_doc"));
+                person.add(personDTO);
+            }
+            connection.close();
+        } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+            System.out.println("CONNECTION ERROR FINDALL II PERSON: " + e.getMessage());
+        }
+
+        return person;
+    }
+
     public int getTotalPersons() {
         String sql = "SELECT COUNT(*) AS total FROM Person";
         int total = 0;
