@@ -1,9 +1,11 @@
 package ar.com.ada.maven.view;
 
+import ar.com.ada.maven.model.DTO.PersonDTO;
+import ar.com.ada.maven.utils.Ansi;
 import ar.com.ada.maven.utils.Keyboard;
 
 import java.util.InputMismatchException;
-
+import java.util.List;
 import java.util.Scanner;
 
 public class PersonView {
@@ -57,6 +59,80 @@ public class PersonView {
                 "\nNúmero de documento: " + numberDoc);
         Keyboard.pressEnterToContinue();
     }
+
+    public String printPersonPerPage(final List<PersonDTO> person, List<String> paginator, String optionEdithOrDelete, boolean showHeader) {
+        if (showHeader)
+            System.out.println("Los clientes son: ");
+            person.forEach((PersonDTO personDTO) -> {
+            System.out.println("\t|" + personDTO.getId() + "\t|\t" + personDTO.getName() + "\t|" +
+                    personDTO.getLastName() + "\t|" + personDTO.getNumber_doc());
+        });
+        if (optionEdithOrDelete != null && !optionEdithOrDelete.isEmpty())
+            System.out.println("\n+-----------------------------------------------------------+");
+        paginator.forEach((page) -> System.out.print(page + " "));
+        System.out.println("\n+-----------------------------------------------------------+\n");
+
+        Scanner keyboard = Keyboard.getInstance();
+
+        while (true) {
+            try {
+                System.out.println("? ");
+                String name = keyboard.nextLine().trim();
+                while (!name.matches("^[0-9IiAaSsUuEe]+$") && !name.isEmpty()) {
+                    MainView.chooseValidOption();
+                    System.out.println("? ");
+                    name = keyboard.nextLine();
+                }
+                return name;
+            } catch (InputMismatchException e) {
+                MainView.chooseValidOption();
+                keyboard.next();
+            }
+        }
+    }
+
+    public int personIdSelected(String action) {
+        switch (action) {
+            case "[" + "E" + Ansi.RESET + "ditar]":
+                action = "Editar";
+                break;
+            case "[" + "E" + Ansi.RESET + "liminar]":
+                action = "Eliminar";
+                break;
+            case "[" + "E" + Ansi.RESET + "legir]":
+                action = "Elegir";
+                break;
+        }
+
+        System.out.println("Ingrese el numero de ID del cliente para " + action +
+                " ó 0 para cancelar: \n");
+        Scanner keyboard = Keyboard.getInstance();
+
+        while (true) {
+            try {
+                System.out.println("? ");
+                int choice = keyboard.nextInt();
+                return choice;
+            } catch (InputMismatchException e) {
+                System.out.println("Error, debe ingresar un id valido");
+                keyboard.next();
+            }
+        }
+    }
+
+    public void printAllPerson(List<PersonDTO> person) {
+        System.out.println("*** LISTA DE CLIENTES ***");
+
+        System.out.println("\t|\tID \t|CLIENTES|");
+        System.out.println("\t|-------------------|");
+
+        person.forEach((personDTO) -> {
+            System.out.println("\t|\t" + personDTO.getId() + "\t|\t" + personDTO.getName() + "\t|" +
+                    "\t|" + personDTO.getLastName() + "\t|" + personDTO.getNumber_doc());
+        });
+        Keyboard.pressEnterToContinue();
+    }
+
 
     /*public String getNewTypeAccount() {
         System.out.println("Seleccione qué tipo de cuenta aspira: " +

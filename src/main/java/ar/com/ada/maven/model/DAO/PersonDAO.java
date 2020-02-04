@@ -116,4 +116,20 @@ public class PersonDAO implements DAO<PersonDTO> {
 
         return hasErased == 1;
     }
+
+    public int getTotalPersons() {
+        String sql = "SELECT COUNT(*) AS total FROM Person";
+        int total = 0;
+        try {
+            Connection connection = DBConnection.getConnection();
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(sql);
+            if (rs.next())  total = rs.getInt("total");
+            connection.close();
+        } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+            System.out.println("CONNECTION ERROR GETTOTALCONTINENTS PERSONS: " + e.getMessage());
+        }
+
+        return total;
+    }
 }

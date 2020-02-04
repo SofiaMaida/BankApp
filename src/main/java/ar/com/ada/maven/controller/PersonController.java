@@ -1,16 +1,17 @@
 package ar.com.ada.maven.controller;
 
 import ar.com.ada.maven.model.DAO.PersonDAO;
-import ar.com.ada.maven.model.DAO.Type_accountDAO;
 import ar.com.ada.maven.model.DTO.PersonDTO;
-import ar.com.ada.maven.model.DTO.Type_accountDTO;
+import ar.com.ada.maven.utils.Paginator;
+import ar.com.ada.maven.view.MainView;
 import ar.com.ada.maven.view.PersonView;
+
+import java.util.List;
 
 public class PersonController {
 
     private static PersonView view = new PersonView();
     private static PersonDAO personDAO = new PersonDAO();
-    // private static Type_accountDAO type_accountDAO = new Type_accountDAO();
 
     public static void init() {
         boolean shouldGetOut = false;
@@ -21,9 +22,8 @@ public class PersonController {
                 case "a":
                     createNewClient();
                     break;
-                //case "b":
-                //  createNewAccount();
-                //break;
+                case "b":
+                    personList();
                 case "d":
                     shouldGetOut = true;
                 default:
@@ -52,6 +52,66 @@ public class PersonController {
         }
     }
 
+    public static void personList() {
+        int i = personListPerPage(null, true);
+        List<PersonDTO> person = personDAO.findAll();
+        view.printAllPerson(person);
+    }
+
+    public static int personListPerPage(String optionSelectedEdithOrDelete, boolean showHeader) {
+        int limit = 3, currentPage = 0, totalPages, totalPersons, personIdSelected = 0;
+        List<PersonDTO> person = null;
+        Boolean shouldGetOut = false;
+        List<String> paginator;
+
+        while (!shouldGetOut) {
+            totalPersons = personDAO.getTotalPersons();
+            totalPages = (int) Math.ceil((double) totalPersons / limit);
+            paginator = Paginator.buildPaginator(currentPage, totalPages);
+
+            String choice = view.printPersonPerPage(person, paginator, optionSelectedEdithOrDelete, showHeader);
+            switch (choice) {
+                case "i":
+                case "I":
+                    currentPage = 0;
+                    break;
+                case "a":
+                case "A":
+                    if (currentPage > 0)
+                        currentPage--;
+                    break;
+                case "s":
+                case "S":
+                    if (currentPage + 1 < totalPages)
+                        currentPage++;
+                    break;
+                case "u":
+                case "U":
+                    currentPage = totalPages - 1;
+                    break;
+                case "e":
+                case "E":
+                    boolean shouldtGetOut;
+                    if (optionSelectedEdithOrDelete != null) {
+                        personIdSelected = view.personIdSelected(optionSelectedEdithOrDelete);
+                        shouldtGetOut = true;
+                    }
+                case "q":
+                case "Q":
+                    shouldtGetOut = true;
+                    break;
+                default:
+                    if (choice.matches("^-?\\d+$")) {
+                        int page = Integer.parseInt(choice);
+                        if (page > 0 && page <= totalPages) currentPage = page - 1;
+                    } else MainView.chooseValidOption();
+            }
+        }
+        return personIdSelected;
+    }
+
+}
+
     /*public static void createNewAccount() {
         String accountNumber = view.getNewTypeAccount();
         if (!accountNumber.isEmpty()) {
@@ -69,4 +129,3 @@ public class PersonController {
         }
 
     }*/
-}
