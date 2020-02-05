@@ -8,10 +8,10 @@ public class DBConnection {
 
     private static Connection connection;
 
-    private static String user = "adadb";                                //usuario
+    private static String user = "ada";                                //usuario
     private static String host = "jdbc:mysql://localhost:3306/";        //host - puerto
-    private static String password = "adadb1";                     //contraseña
-    private static String db = "BankRota";                           //base de datos para conectar
+    private static String password = "AdaDB2020+";                     //contraseña
+    private static String db = "bankrota";                           //base de datos para conectar
     private static String drive = "com.mysql.cj.jdbc.Driver";
 
     private DBConnection() {
