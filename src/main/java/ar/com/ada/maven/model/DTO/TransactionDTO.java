@@ -1,14 +1,14 @@
-package ar.com.ada.maven.model;
+package ar.com.ada.maven.model.DTO;
 
 import ar.com.ada.maven.model.DTO.MovementsDTO;
 
-public class Transaction {
+public class TransactionDTO {
 
     private int id;
-    private int amount;
+    private Double amount;
     private MovementsDTO movements;
 
-    public Transaction(int id, int amount, MovementsDTO movements) {
+    public TransactionDTO(int id, Double amount, MovementsDTO movements) {
         this.id = id;
         this.amount = amount;
         this.movements = movements;
@@ -22,11 +22,11 @@ public class Transaction {
         this.id = id;
     }
 
-    public int getAmount() {
+    public Double getAmount() {
         return amount;
     }
 
-    public void setAmount(int amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
 

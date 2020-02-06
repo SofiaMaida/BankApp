@@ -1,3 +1,9 @@
 .idea
 BankApp.iml
+<<<<<<< HEAD
 DBConnetion
+pom.xml
+DBConnection
+=======
+DBConnection
+>>>>>>> featureModelDAO

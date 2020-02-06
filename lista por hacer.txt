@@ -1,0 +1,54 @@
+1er TP Java
+Corrupt-Bank desea empezar a abrir sucursales Argentina y para empezar sus operaciones, lo hara ofreciendo 3 productos: 
+- CUENTA CORRIENTE en ARG
+- CUENTA CORRIENTE en USD
+- CUENTA CORRIENTE en EUR. 
+Ellos necesitan una app en java para lograr este objetivo la cual debe comtemplar las siguiente reglas:
+1.- Una cuenta corriente puede tener N movimientos.
+2.- Los movimientos no pueden eliminarse ni modificarse.
+3.- Las cuentas solo pueden eliminarse si no tienen movimientos asociados.
+4.- Los numeros de cuentas deben cumplir con el CODIGO IBAN (https://www.bbva.com/es/swift-e-iban/)
+5.- Los movimientos poseen fecha (tomar horario UTC), tipo de movimiento (debito o credito), descripcion (200 caracteres) e importe (numerico de 2 decimales).
+6.- Cada vez que se incorpora un nuevo movimiento, y dependiendo de su tipo, se debe actualizar el saldo de la cuenta asociada.
+7.- Si un movimiento genera un descubierto mayor a 1000 (para cuentas en pesos), 300 (para cuentas en dolares) o 150 (para cuentas en euros) se deberá rechazar.
+8.- Cada cuenta debe tener asociado un cliente con los siguientes datos: nombre, apellido, numero de documento y tipo de documento.
+9.- Los clientes solo pueden eliminarse si no tienen cuentas asociadas a ellos.
+10.- La app tambien debe tener las opciones de motrar las cuentas por cliente y los movimientos de cada una de esas cuentas.
+-------------------------------------------------------------------------------------------------------------
+COSAS POR HACER:
+-Esqueleto / DTO / SQL 
+
+1featureModel (DAO)
+-hacer interface DAO (findAll, FindById, save, update, delete, findbyName, getTotalMovements)
+
+2 featuresContact/Doc:Contacto&documento
+-insertar tipos de documentos (4 max)
+
+3featuresPerson: Persona
+
+4 featuresMovimientos: tipo/transaccion/balance
+-ingresarlos tipo de movimientos(debito / credito / transferencia / deposito)
+
+5featureMov: movimientos
+
+5 featureAccount: tipo de cuenta & cuenta
+-Codigo IBAN primeros numeros
+-insertar en cuenta (cuenta corriente USD-EURO-ARG)
+
+6 feature Paginator:
+-crear paginador
+
+Feature paquete controller:
+1 Maincontroller
+-Person [ingresar datos de persona (nmbre, apellido, doc, tipo)]
+-Account [update del balance, insert de movimientos] 
+-movements [IF DESCUBIERTO(cuenta en pesos <1000, cuenta dolar < 300, cuenta euros < 150)]
+(foreigne keys)
+
+feature paquete View:
+1MainView
+2Account [aviso de eliminar cliente si no tiene cuenta][eliminar si no hay movimientos][
+3Movements [aviso de que no se puede eliminar, ni modificar]
+4 balance [update de balance despues de un movimiento]
+5Person [nombre y apellido]
+

@@ -8,9 +8,9 @@ public class MovementsDTO {
     private int id;
     private Date move_date;
     private String description;
-    private BalanceDTO balance_id;
-    private AccountDTO account_id;
-    private Type_movementsDTO type_movements_id;
+    private BalanceDTO balance;
+    private AccountDTO account;
+    private Type_movementsDTO type_movements;
 
     public MovementsDTO() {
     }
@@ -19,9 +19,9 @@ public class MovementsDTO {
         this.id = id;
         this.move_date = move_date;
         this.description = description;
-        this.balance_id = balance_id;
-        this.account_id = account_id;
-        this.type_movements_id = type_movements_id;
+        this.balance = balance_id;
+        this.account = account_id;
+        this.type_movements = type_movements_id;
     }
 
     public int getId() {
@@ -32,8 +32,8 @@ public class MovementsDTO {
         this.id = id;
     }
 
-    public Date getMove_date() {
-        return move_date;
+    public java.sql.Date getMove_date() {
+        return (java.sql.Date) move_date;
     }
 
     public void setMove_date(Date move_date) {
@@ -48,28 +48,28 @@ public class MovementsDTO {
         this.description = description;
     }
 
-    public BalanceDTO getBalance_id() {
-        return balance_id;
+    public BalanceDTO getBalance() {
+        return balance;
     }
 
-    public void setBalance_id(BalanceDTO balance_id) {
-        this.balance_id = balance_id;
+    public void setBalance(BalanceDTO balance) {
+        this.balance = balance;
     }
 
-    public AccountDTO getAccount_id() {
-        return account_id;
+    public AccountDTO getAccount() {
+        return account;
     }
 
-    public void setAccount_id(AccountDTO account_id) {
-        this.account_id = account_id;
+    public void setAccount(AccountDTO account) {
+        this.account = account;
     }
 
-    public Type_movementsDTO getType_movements_id() {
-        return type_movements_id;
+    public Type_movementsDTO getType_movements() {
+        return type_movements;
     }
 
-    public void setType_movements_id(Type_movementsDTO type_movements_id) {
-        this.type_movements_id = type_movements_id;
+    public void setType_movements(Type_movementsDTO type_movements) {
+        this.type_movements = type_movements;
     }
 
     @Override
@@ -78,9 +78,9 @@ public class MovementsDTO {
                 "id=" + id +
                 ", move_date=" + move_date +
                 ", description='" + description + '\'' +
-                ", balance_id=" + balance_id +
-                ", account_id=" + account_id +
-                ", type_movements_id=" + type_movements_id +
+                ", balance_id=" + balance +
+                ", account_id=" + account +
+                ", type_movements_id=" + type_movements +
                 '}';
     }
 
@@ -92,13 +92,13 @@ public class MovementsDTO {
         return id == movements.id &&
                 Objects.equals(move_date, movements.move_date) &&
                 Objects.equals(description, movements.description) &&
-                Objects.equals(balance_id, movements.balance_id) &&
-                Objects.equals(account_id, movements.account_id) &&
-                Objects.equals(type_movements_id, movements.type_movements_id);
+                Objects.equals(balance, movements.balance) &&
+                Objects.equals(account, movements.account) &&
+                Objects.equals(type_movements, movements.type_movements);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, move_date, description, balance_id, account_id, type_movements_id);
+        return Objects.hash(id, move_date, description, balance, account, type_movements);
     }
 }

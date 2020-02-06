@@ -6,7 +6,7 @@ public class ContactDTO {
     private Integer number_phone;
     private PersonDTO person;
 
-    public ContactDTO() {
+    public ContactDTO(int id, PersonDTO person) {
     }
 
     public ContactDTO(Integer id, Integer number_phone) {
