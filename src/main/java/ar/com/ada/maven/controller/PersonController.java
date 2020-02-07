@@ -3,9 +3,9 @@ package ar.com.ada.maven.controller;
 import ar.com.ada.maven.model.DAO.PersonDAO;
 import ar.com.ada.maven.model.DTO.PersonDTO;
 import ar.com.ada.maven.utils.Paginator;
-import ar.com.ada.maven.view.MainView;
 import ar.com.ada.maven.view.PersonView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PersonController {
@@ -24,6 +24,10 @@ public class PersonController {
                     break;
                 case "b":
                     personList();
+                    break;
+                case "c":
+                  edithPerson();
+                  break;
                 case "d":
                     shouldGetOut = true;
                 default:
@@ -53,23 +57,46 @@ public class PersonController {
     }
 
     public static void personList() {
-        int i = personListPerPage(null, true);
+        personListPerPage(null, true);
         List<PersonDTO> person = personDAO.findAll();
         view.printAllPerson(person);
     }
 
+    private static List<String> buildPaginator(int currentPage, int totalPages) {
+        List<String> pages = new ArrayList<>();
+        pages.add("[Inicio]");
+        pages.add("[Anterior]");
+
+        for (int i = 1; i <= totalPages; i++) {
+            if (i == currentPage + 1)
+                pages.add("[>" + i + "<]");
+            else
+                pages.add("[" + i + "]");
+        }
+
+        pages.add("[Siguiente]");
+        pages.add("[Ultimo]");
+
+        return pages;
+    }
+
     public static int personListPerPage(String optionSelectedEdithOrDelete, boolean showHeader) {
-        int limit = 3, currentPage = 0, totalPages, totalPersons, personIdSelected = 0;
-        List<PersonDTO> person = null;
+        int limit = 3, currentPage = 0;
+        //totalPages, totalPersons, personIdSelected = 0;
+        List<PersonDTO> person;
+        int numberPersons;
+        int totalPages;
         Boolean shouldGetOut = false;
         List<String> paginator;
 
         while (!shouldGetOut) {
-            totalPersons = personDAO.getTotalPersons();
-            totalPages = (int) Math.ceil((double) totalPersons / limit);
+            person = personDAO.findAll(limit, currentPage * limit);
+            numberPersons = personDAO.getTotalPersons();
+            //totalPersons = personDAO.getTotalPersons();
+            totalPages = (int) Math.ceil((double) numberPersons / limit);
             paginator = Paginator.buildPaginator(currentPage, totalPages);
+            String choice = view.printPersonPerPage(person, paginator);
 
-            String choice = view.printPersonPerPage(person, paginator, optionSelectedEdithOrDelete, showHeader);
             switch (choice) {
                 case "i":
                 case "I":
@@ -91,26 +118,56 @@ public class PersonController {
                     break;
                 case "e":
                 case "E":
-                    boolean shouldtGetOut;
+                    return view.personIdSelected("Editar");
+                    /*boolean shouldtGetOut;
                     if (optionSelectedEdithOrDelete != null) {
                         personIdSelected = view.personIdSelected(optionSelectedEdithOrDelete);
                         shouldtGetOut = true;
-                    }
+                    }*/
                 case "q":
                 case "Q":
-                    shouldtGetOut = true;
+                    shouldGetOut = true;
                     break;
                 default:
                     if (choice.matches("^-?\\d+$")) {
                         int page = Integer.parseInt(choice);
                         if (page > 0 && page <= totalPages) currentPage = page - 1;
-                    } else MainView.chooseValidOption();
+                    } else //MainView.chooseValidOption();
+                        System.out.println("Error");
             }
         }
-        return personIdSelected;
+        return limit;
     }
 
-}
+    private static void edithPerson() {
+        int personIdToEdith = personListPerPage(Paginator.EDITH, true);
+        if (personIdToEdith != 0)
+            editSelectedPerson(personIdToEdith);
+        else
+            view.updatePersonCanceled();
+    }
+   private static void editSelectedPerson(int id) {
+        PersonDTO person = personDAO.findById(id);
+        if (person != null) {
+            String nameToUpdate = view.getDataUpdate(person);
+
+            if (!nameToUpdate.isEmpty()) {
+                personDAO.findByDni(nameToUpdate);
+                person.setNumber_doc(nameToUpdate);
+                Boolean isSaved = personDAO.update(person);
+                if (isSaved)
+                    view.showUpdateData(person.getName(), person.getLastName(), person.getNumber_doc());
+            } else
+                view.updatePersonCanceled();
+        } else {
+            view.personNotExist(id);
+            int personIdSelected = view.personIdSelected("Editar");
+            if (personIdSelected != 0) {
+                editSelectedPerson(personIdSelected);
+            } else
+                view.updatePersonCanceled();
+        }
+    }
 
     /*public static void createNewAccount() {
         String accountNumber = view.getNewTypeAccount();
@@ -129,3 +186,4 @@ public class PersonController {
         }
 
     }*/
+}

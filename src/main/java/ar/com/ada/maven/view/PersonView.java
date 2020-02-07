@@ -4,6 +4,7 @@ import ar.com.ada.maven.model.DTO.PersonDTO;
 import ar.com.ada.maven.utils.Ansi;
 import ar.com.ada.maven.utils.Keyboard;
 
+import java.security.Key;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
@@ -60,15 +61,14 @@ public class PersonView {
         Keyboard.pressEnterToContinue();
     }
 
-    public String printPersonPerPage(final List<PersonDTO> person, List<String> paginator, String optionEdithOrDelete, boolean showHeader) {
-        if (showHeader)
-            System.out.println("Los clientes son: ");
-            person.forEach((PersonDTO personDTO) -> {
+    public String printPersonPerPage(List<PersonDTO> person, List<String> paginator) {
+        System.out.println("Los clientes son: ");
+        person.forEach((personDTO) -> {
             System.out.println("\t|" + personDTO.getId() + "\t|\t" + personDTO.getName() + "\t|" +
                     personDTO.getLastName() + "\t|" + personDTO.getNumber_doc());
         });
-        if (optionEdithOrDelete != null && !optionEdithOrDelete.isEmpty())
-            System.out.println("\n+-----------------------------------------------------------+");
+        //if (optionEdithOrDelete != null && !optionEdithOrDelete.isEmpty())
+        System.out.println("\n+-----------------------------------------------------------+");
         paginator.forEach((page) -> System.out.print(page + " "));
         System.out.println("\n+-----------------------------------------------------------+\n");
 
@@ -79,13 +79,14 @@ public class PersonView {
                 System.out.println("? ");
                 String name = keyboard.nextLine().trim();
                 while (!name.matches("^[0-9IiAaSsUuEe]+$") && !name.isEmpty()) {
-                    MainView.chooseValidOption();
-                    System.out.println("? ");
+                    //MainView.chooseValidOption();
+                    System.out.println("Error, debe ingresar una opcion valida");
                     name = keyboard.nextLine();
                 }
                 return name;
             } catch (InputMismatchException e) {
-                MainView.chooseValidOption();
+                System.out.println("Error, debe ingresar una opcion valida");
+                //MainView.chooseValidOption();
                 keyboard.next();
             }
         }
@@ -127,11 +128,50 @@ public class PersonView {
         System.out.println("\t|-------------------|");
 
         person.forEach((personDTO) -> {
-            System.out.println("\t|\t" + personDTO.getId() + "\t|\t" + personDTO.getName() + "\t|" +
-                    "\t|" + personDTO.getLastName() + "\t|" + personDTO.getNumber_doc());
+            System.out.println("|\t" + personDTO.getId() + "\t|\t" + personDTO.getName() + "\t|\t" +
+                    "\t|\t" + personDTO.getLastName() + "\t|\t" + personDTO.getNumber_doc());
         });
         Keyboard.pressEnterToContinue();
     }
+
+    public void updatePersonCanceled() {
+        System.out.println("Ha cancelado la actualización");
+        Keyboard.pressEnterToContinue();
+    }
+
+    public static String getDataUpdate(PersonDTO personDTO) {
+        System.out.println("Se actualizara el siguiente dato: ");
+        System.out.println(personDTO.getId() + "\t" + personDTO.getName() + "\t" + personDTO.getLastName() + "\t" + personDTO.getNumber_doc());
+        System.out.println("Ingrese el dato para actualizar \n[Para cancelar no ingrese datos y presione enter]: ");
+
+        Scanner scanner = Keyboard.getInstance();
+        scanner.nextLine();
+
+        while (true) {
+            try {
+                String name = scanner.nextLine().trim();
+                while (!name.matches("^[A-Za-záéíóúüÁÉÍÓÚÜ\\s]+$") && !name.isEmpty()) {
+                    System.out.println("Error, debe ingresar un dato valido");
+                    name = scanner.nextLine();
+                }
+                return name;
+            } catch (InputMismatchException e) {
+                System.out.println("Error, debe ingresar un dato válido");
+                scanner.next();
+            }
+        }
+    }
+
+    public void showUpdateData(String name, String lastName, Integer numberDoc) {
+        System.out.println("Los datos se han actualizado con éxito");
+        Keyboard.pressEnterToContinue();
+    }
+
+    public void personNotExist (int id) {
+        System.out.println("El cliente no existe");
+        Keyboard.pressEnterToContinue();
+    }
+
 
 
     /*public String getNewTypeAccount() {
