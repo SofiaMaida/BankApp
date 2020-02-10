@@ -2,6 +2,7 @@ package ar.com.ada.maven.controller;
 
 import ar.com.ada.maven.model.DAO.PersonDAO;
 import ar.com.ada.maven.model.DTO.PersonDTO;
+import ar.com.ada.maven.utils.Ansi;
 import ar.com.ada.maven.utils.Paginator;
 import ar.com.ada.maven.view.PersonView;
 
@@ -26,9 +27,11 @@ public class PersonController {
                     personList();
                     break;
                 case "c":
-                  edithPerson();
-                  break;
+                    edithPerson();
+                    break;
                 case "d":
+                    deletePerson();
+                case "f":
                     shouldGetOut = true;
                 default:
                     System.out.println("Opción no valida, vuelva a seleccionar");
@@ -53,49 +56,89 @@ public class PersonController {
                 if (isSaved)
                     view.showNewClient(newPerson.getName(), newPerson.getLastName(), newPerson.getNumber_doc());
             }
+        } else {
+            view.newClientCanceled();
         }
     }
 
     public static void personList() {
-        personListPerPage(null, true);
         List<PersonDTO> person = personDAO.findAll();
         view.printAllPerson(person);
     }
 
-    private static List<String> buildPaginator(int currentPage, int totalPages) {
-        List<String> pages = new ArrayList<>();
-        pages.add("[Inicio]");
-        pages.add("[Anterior]");
-
-        for (int i = 1; i <= totalPages; i++) {
-            if (i == currentPage + 1)
-                pages.add("[>" + i + "<]");
-            else
-                pages.add("[" + i + "]");
-        }
-
-        pages.add("[Siguiente]");
-        pages.add("[Ultimo]");
-
-        return pages;
+    private static void edithPerson() {
+        int personIdToEdith = personListPerPage(true);
+        if (personIdToEdith != 0)
+            editSelectedPerson(personIdToEdith);
+        else
+            view.updatePersonCanceled();
     }
 
-    public static int personListPerPage(String optionSelectedEdithOrDelete, boolean showHeader) {
-        int limit = 3, currentPage = 0;
-        //totalPages, totalPersons, personIdSelected = 0;
+    private static void editSelectedPerson(int id) {
+        PersonDTO person = personDAO.findById(id);
+        if (person != null) {
+            String nameToUpdate = view.getDataUpdate(person);
+
+            if (!nameToUpdate.isEmpty()) {
+                personDAO.findByDni(nameToUpdate);
+                person.setNumber_doc(nameToUpdate);
+                Boolean isSaved = personDAO.update(person, id);
+                if (isSaved)
+                    view.showUpdateData(person.getName(), person.getLastName(), person.getNumber_doc());
+            } else
+                view.updatePersonCanceled();
+        } else {
+            view.personNotExist(id);
+            int personIdSelected = view.personIdSelected("Editar");
+            if (personIdSelected != 0) {
+                editSelectedPerson(personIdSelected);
+            } else
+                view.updatePersonCanceled();
+        }
+    }
+
+    private static void deletePerson() {
+        int personIdToDelete = personListPerPage(false);
+        if (personIdToDelete != 0)
+            deleteSelectedPerson(personIdToDelete);
+        else
+            view.updatePersonCanceled();
+    }
+
+    private static void deleteSelectedPerson(int id) {
+        PersonDTO person = personDAO.findById(id);
+        if (person != null) {
+            Boolean nameDelete = view.getNameDelete(person);
+            if (nameDelete) {
+                Boolean isDelete = personDAO.delete(id);
+                if (isDelete)
+                    view.showDeletePerson(person.getName(), person.getLastName(), person.getNumber_doc());
+            } else
+                view.deletePersonCanceled();
+        } else {
+            view.personNotExist(id);
+            int personIdSelected = view.personIdSelected("Eliminar");
+            if (personIdSelected != 0) {
+                deleteSelectedPerson(personIdSelected);
+            } else
+                view.deletePersonCanceled();
+        }
+
+    }
+
+    private static int personListPerPage(boolean hasEdith) {
+        int limit = 3, currentPage = 0, numberPersons, totalPages;
         List<PersonDTO> person;
-        int numberPersons;
-        int totalPages;
-        Boolean shouldGetOut = false;
         List<String> paginator;
+        Boolean shouldGetOut = false;
 
         while (!shouldGetOut) {
-            person = personDAO.findAll(limit, currentPage * limit);
             numberPersons = personDAO.getTotalPersons();
-            //totalPersons = personDAO.getTotalPersons();
             totalPages = (int) Math.ceil((double) numberPersons / limit);
-            paginator = Paginator.buildPaginator(currentPage, totalPages);
-            String choice = view.printPersonPerPage(person, paginator);
+            paginator = buildPaginator(currentPage, totalPages);
+
+            person = personDAO.findAll(limit, currentPage * limit);
+            String choice = view.printPersonPerPage(person, paginator, hasEdith);
 
             switch (choice) {
                 case "i":
@@ -118,12 +161,8 @@ public class PersonController {
                     break;
                 case "e":
                 case "E":
-                    return view.personIdSelected("Editar");
-                    /*boolean shouldtGetOut;
-                    if (optionSelectedEdithOrDelete != null) {
-                        personIdSelected = view.personIdSelected(optionSelectedEdithOrDelete);
-                        shouldtGetOut = true;
-                    }*/
+                    String action = (hasEdith) ? "Editar" : "Eliminar";
+                    return view.personIdSelected(action);
                 case "q":
                 case "Q":
                     shouldGetOut = true;
@@ -132,41 +171,31 @@ public class PersonController {
                     if (choice.matches("^-?\\d+$")) {
                         int page = Integer.parseInt(choice);
                         if (page > 0 && page <= totalPages) currentPage = page - 1;
-                    } else //MainView.chooseValidOption();
-                        System.out.println("Error");
+                    } else
+                        System.out.println("Error, debe ingresar una opcion valida");
             }
         }
-        return limit;
+        return 0;
     }
 
-    private static void edithPerson() {
-        int personIdToEdith = personListPerPage(Paginator.EDITH, true);
-        if (personIdToEdith != 0)
-            editSelectedPerson(personIdToEdith);
-        else
-            view.updatePersonCanceled();
-    }
-   private static void editSelectedPerson(int id) {
-        PersonDTO person = personDAO.findById(id);
-        if (person != null) {
-            String nameToUpdate = view.getDataUpdate(person);
+    private static List<String> buildPaginator(int currentPage, int totalPages) {
+        List<String> pages = new ArrayList<>();
+        pages.add("[" + Ansi.CYAN + "I" + Ansi.RESET + "nicio]");
+        pages.add("[" + Ansi.CYAN + "A" + Ansi.RESET + "nterior]");
 
-            if (!nameToUpdate.isEmpty()) {
-                personDAO.findByDni(nameToUpdate);
-                person.setNumber_doc(nameToUpdate);
-                Boolean isSaved = personDAO.update(person);
-                if (isSaved)
-                    view.showUpdateData(person.getName(), person.getLastName(), person.getNumber_doc());
-            } else
-                view.updatePersonCanceled();
-        } else {
-            view.personNotExist(id);
-            int personIdSelected = view.personIdSelected("Editar");
-            if (personIdSelected != 0) {
-                editSelectedPerson(personIdSelected);
-            } else
-                view.updatePersonCanceled();
+        for (int i = 1; i <= totalPages; i++) {
+            if (i == currentPage + 1)
+                pages.add(Ansi.YELLOW + "[" + i + "]" + Ansi.RESET);
+            else
+                pages.add("[" + i + "]");
         }
+
+        pages.add("[" + Ansi.CYAN + "S" + Ansi.RESET + "iguiente]");
+        pages.add("[" + Ansi.CYAN + "U" + Ansi.RESET + "ltimo]");
+        pages.add("");
+        pages.add("[" + Ansi.CYAN + "Q" + Ansi.RESET + " para salir]");
+
+        return pages;
     }
 
     /*public static void createNewAccount() {

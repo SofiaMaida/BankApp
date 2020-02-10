@@ -15,9 +15,8 @@ public class MainView {
                 "\n| 1 | ¿Desea ingresar un nuevo usuario?" +
                 "\n| 2 | ¿Desea ingresar con su usuario?" +
                 "\n| 3 | ¿Desea modificar algún dato ingresado?" +
-                "\n| 4 | ¿Desea eliminar alguna cuenta a su nombre?" +
-                "\n| 5 | ¿Desea eliminar su usuario?" +
-                "\n| 6 | Salir");
+                "\n| 4 | ¿Desea eliminar su usuario?" +
+                "\n| 5 | Salir");
 
         Scanner keyboard = Keyboard.getInstance();
 

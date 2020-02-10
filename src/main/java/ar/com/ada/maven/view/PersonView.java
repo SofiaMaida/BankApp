@@ -4,7 +4,6 @@ import ar.com.ada.maven.model.DTO.PersonDTO;
 import ar.com.ada.maven.utils.Ansi;
 import ar.com.ada.maven.utils.Keyboard;
 
-import java.security.Key;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
@@ -49,11 +48,6 @@ public class PersonView {
         }
     }
 
-    public void clientAlreadyExists(String name, String lastName, Integer numberDoc) {
-        System.out.println("Los datos ingresados ya corresponden a otro cliente");
-        Keyboard.pressEnterToContinue();
-    }
-
     public void showNewClient(String name, String lastName, Integer numberDoc) {
         System.out.println("Los datos ingresados son -> \nNombre completo: " + name +
                 "\nApellido: " + lastName +
@@ -61,14 +55,40 @@ public class PersonView {
         Keyboard.pressEnterToContinue();
     }
 
-    public String printPersonPerPage(List<PersonDTO> person, List<String> paginator) {
+    public void newClientCanceled() {
+        System.out.println("Ha cancelado el ingreso");
+        Keyboard.pressEnterToContinue();
+    }
+
+    public void clientAlreadyExists() {
+        System.out.println("Los datos ingresados ya corresponden a otro cliente");
+        Keyboard.pressEnterToContinue();
+    }
+
+    public void printAllPerson(List<PersonDTO> person) {
+        System.out.println("*** LISTA DE CLIENTES ***");
+
+        System.out.println("\t|\tID \t|CLIENTES|");
+        System.out.println("\t|-------------------|");
+
+        person.forEach((personDTO) -> {
+            System.out.println("|\t" + personDTO.getId() + "\t|\t" + personDTO.getName() + "\t|\t" +
+                    "\t|\t" + personDTO.getLastName() + "\t|\t" + personDTO.getNumber_doc());
+        });
+        Keyboard.pressEnterToContinue();
+    }
+
+    public String printPersonPerPage(List<PersonDTO> person, List<String> paginator, boolean hasEdith) {
         System.out.println("Los clientes son: ");
         person.forEach((personDTO) -> {
-            System.out.println("\t|" + personDTO.getId() + "\t|\t" + personDTO.getName() + "\t|" +
+            System.out.println("\t|" + personDTO.getId().toString() + "\t|\t" + personDTO.getName() + "\t|" +
                     personDTO.getLastName() + "\t|" + personDTO.getNumber_doc());
         });
-        //if (optionEdithOrDelete != null && !optionEdithOrDelete.isEmpty())
         System.out.println("\n+-----------------------------------------------------------+");
+        String option = (hasEdith) ?
+                "[" + Ansi.CYAN + "E" + Ansi.RESET + "ditar]" :
+                "[" + Ansi.CYAN + "E" + Ansi.RESET + "liminar]";
+        paginator.set(paginator.size() - 2, option);
         paginator.forEach((page) -> System.out.print(page + " "));
         System.out.println("\n+-----------------------------------------------------------+\n");
 
@@ -79,14 +99,12 @@ public class PersonView {
                 System.out.println("? ");
                 String name = keyboard.nextLine().trim();
                 while (!name.matches("^[0-9IiAaSsUuEe]+$") && !name.isEmpty()) {
-                    //MainView.chooseValidOption();
                     System.out.println("Error, debe ingresar una opcion valida");
                     name = keyboard.nextLine();
                 }
                 return name;
             } catch (InputMismatchException e) {
                 System.out.println("Error, debe ingresar una opcion valida");
-                //MainView.chooseValidOption();
                 keyboard.next();
             }
         }
@@ -121,24 +139,6 @@ public class PersonView {
         }
     }
 
-    public void printAllPerson(List<PersonDTO> person) {
-        System.out.println("*** LISTA DE CLIENTES ***");
-
-        System.out.println("\t|\tID \t|CLIENTES|");
-        System.out.println("\t|-------------------|");
-
-        person.forEach((personDTO) -> {
-            System.out.println("|\t" + personDTO.getId() + "\t|\t" + personDTO.getName() + "\t|\t" +
-                    "\t|\t" + personDTO.getLastName() + "\t|\t" + personDTO.getNumber_doc());
-        });
-        Keyboard.pressEnterToContinue();
-    }
-
-    public void updatePersonCanceled() {
-        System.out.println("Ha cancelado la actualización");
-        Keyboard.pressEnterToContinue();
-    }
-
     public static String getDataUpdate(PersonDTO personDTO) {
         System.out.println("Se actualizara el siguiente dato: ");
         System.out.println(personDTO.getId() + "\t" + personDTO.getName() + "\t" + personDTO.getLastName() + "\t" + personDTO.getNumber_doc());
@@ -162,13 +162,55 @@ public class PersonView {
         }
     }
 
-    public void showUpdateData(String name, String lastName, Integer numberDoc) {
-        System.out.println("Los datos se han actualizado con éxito");
+    public void personNotExist(int id) {
+        System.out.println("El cliente no existe con el id" + id);
         Keyboard.pressEnterToContinue();
     }
 
-    public void personNotExist (int id) {
-        System.out.println("El cliente no existe");
+    public void updatePersonCanceled() {
+        System.out.println("Ha cancelado la actualización");
+        Keyboard.pressEnterToContinue();
+    }
+
+    public void showUpdateData(String name, String lastName, Integer numberDoc) {
+        System.out.println("Los datos se han actualizado con éxito" + Ansi.GREEN + "\nNombre: " + name +
+                        Ansi.GREEN + "\nApellido: " + lastName + Ansi.GREEN + "\nNumero de documento: " + numberDoc);
+        Keyboard.pressEnterToContinue();
+    }
+
+    public static Boolean getNameDelete(PersonDTO person) {
+        System.out.println("Se eliminará el siguiente cliente: ");
+        System.out.println(person.getName() + "\t" + person.getLastName() + "\t" + person.getNumber_doc());
+        System.out.println("¿Está seguro que desea eliminar?");
+        System.out.println("| 1 | Si");
+        System.out.println("| 2 | No");
+
+        Scanner scanner = Keyboard.getInstance();
+        scanner.nextLine();
+
+        while (true) {
+            try {
+                System.out.println("? ");
+                String name = scanner.nextLine().trim();
+                while (!name.matches("^[A-Za-záéíóúüÁÉÍÓÚÜ\\s]+$") && !name.isEmpty()) {
+                    System.out.println("Error, debe ingresar un dato valido");
+                    name = scanner.nextLine();
+                }
+                return "1".equals(name);
+            } catch (InputMismatchException e) {
+                System.out.println("Error, debe ingresar un dato valido");
+                scanner.next();
+            }
+        }
+    }
+
+    public void deletePersonCanceled() {
+        System.out.println("Se ha cancelado la eliminacion");
+        Keyboard.pressEnterToContinue();
+    }
+
+    public void showDeletePerson(String name, String lastName, Integer numberDoc) {
+        System.out.println("El cliente " + name + lastName + numberDoc + " se ha eliminado con éxito");
         Keyboard.pressEnterToContinue();
     }
 
