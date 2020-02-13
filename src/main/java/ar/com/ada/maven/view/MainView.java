@@ -14,22 +14,9 @@ public class MainView {
         System.out.println("Seleccione una opción: " +
                 "\n| 1 | ¿Desea ingresar un nuevo usuario?" +
                 "\n| 2 | ¿Desea ingresar con su usuario?" +
-                "\n| 3 | ¿Desea modificar algún dato ingresado?" +
-                "\n| 4 | ¿Desea eliminar su usuario?" +
-                "\n| 5 | Salir");
+                "\n| 3 | Salir");
 
-        Scanner keyboard = Keyboard.getInstance();
-
-        while (true) {
-            try {
-                int choice = keyboard.nextInt();
-                keyboard.nextLine();
-                return choice;
-            } catch (InputMismatchException e) {
-                System.out.println("Error, debe ingresar un dato valido");
-                keyboard.nextLine();
-            }
-        }
+        return Integer.valueOf(Keyboard.getInputInteger());
     }
 
     public static void chooseValidOption() {
