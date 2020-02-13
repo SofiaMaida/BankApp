@@ -5,6 +5,7 @@ import ar.com.ada.maven.model.DAO.MovementsDAO;
 import ar.com.ada.maven.model.DTO.MovementsDTO;
 import ar.com.ada.maven.view.MovementView;
 
+import java.io.IOException;
 import java.util.List;
 
 public class MovementController {
@@ -42,13 +43,26 @@ public class MovementController {
         }
     }
 
-    public void listAllMovements(){}
-
-    private void movementsList(){
+    public void listAllMovements(){
         List<MovementsDTO> movementsDTOList = movDAO.findAll();
         view.printAllMovements(movementsDTOList);
         try {
-            System.out.println("|");
+            System.out.println("| Presiona ENTER para regresar al menu |\n");
+            System.in.read();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void movementsList(){
+        List<MovementsDTO> movementsDTOList = movDAO.findAll();
+        // como hacer para que liste solo 7 movimientos
+        view.showNewMovements(movementsDTOList);
+        try {
+            System.out.println("| Presiona ENTER para regresar al menu |\n");
+            System.in.read();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
