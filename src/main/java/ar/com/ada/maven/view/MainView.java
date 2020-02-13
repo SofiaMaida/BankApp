@@ -36,4 +36,25 @@ public class MainView {
         System.out.println("Error, debe ingresar un dato válido");
         System.out.println(Ansi.RESET);
     }
+
+    public int movementsMenu(){
+        System.out.println(" - BANK ROTA - Modulo Movimientos: \n");
+        System.out.println(" -> Seleccione un opción del menú: " +
+                "\n| 1 | ¿Hacer un movimiento nuevo?" +
+                "\n| 2 | Consultar movimientos" +
+                "\n| 3 | Salir. ");
+
+        Scanner keyboard = Keyboard.getInstance();
+        while (true) {
+            try {
+                int choice = keyboard.nextInt();
+                keyboard.nextLine();
+                return choice;
+            } catch (InputMismatchException e) {
+                System.out.println("Error, debe ingresar un dato valido");
+                keyboard.nextLine();
+            }
+        }
+
+    }
 }
