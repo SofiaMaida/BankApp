@@ -43,8 +43,7 @@ public class MovementController {
     }
 
     public static void createNewMovement() {
-        List<Type_movementsDTO> typeMov = (List<Type_movementsDTO>) typeMovDAO.findAll();
-        HashMap<String, String> movement = view.getNewMovements(typeMov);
+        HashMap<String, String> movement = view.getNewMovements();
         if (!movement.isEmpty()){
             int typeMovID = Integer.parseInt(movement.get("type_movement"));
             Type_movementsDTO type = typeMovDAO.findById(typeMovID);

@@ -46,7 +46,7 @@ public class MovementView {
 
     }
 
-    public HashMap<String, String> getNewMovements(List<Type_movementsDTO> typeMov){
+    public HashMap<String, String> getNewMovements(){
         HashMap<String,String> data = new HashMap<>();
         Scanner scanner = Keyboard.getInstance();
 
@@ -84,6 +84,7 @@ public class MovementView {
                     + MovementsDTO.getAmount() + "\t|\t" + MovementsDTO.getMove_date() + "\t|\t" + MovementsDTO.getDescription()
                     +"\t|\t"); });
         Scanner keyboard = Keyboard.getInstance();
+        Keyboard.pressEnterToContinue();
 
         while (true){
             try {
@@ -101,6 +102,7 @@ public class MovementView {
             }
 
         }
+
     }
 
     public void updateMovementCanceled() {
