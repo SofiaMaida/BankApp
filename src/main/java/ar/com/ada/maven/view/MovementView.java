@@ -1,14 +1,19 @@
 package ar.com.ada.maven.view;
 
+import ar.com.ada.maven.model.DTO.MovementsDTO;
 import ar.com.ada.maven.model.DTO.TransactionDTO;
+import ar.com.ada.maven.model.DTO.Type_movementsDTO;
 import ar.com.ada.maven.utils.Ansi;
 import ar.com.ada.maven.utils.Keyboard;
 
 import java.util.HashMap;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 public class MovementView {
+
+    private static TransactionDTO transaction = new TransactionDTO();
 
     public int movementsMenu(){
         System.out.println(" - BANK ROTA - Modulo Movimientos: \n");
@@ -30,7 +35,18 @@ public class MovementView {
         }
     }
 
-    public void printAllMovements(){
+    public void printAllMovement(List<MovementsDTO> movements){
+        System.out.println("*** LISTA DE MOVIMIENTOS ***");
+
+        System.out.println("\t|\tID \t| TIPO DE MOVIMIENTO |\t| MONTO \t| FECHA | \t| CONCEPTO |");
+        System.out.println("\t|-------------------|");
+
+        movements.forEach((MovementsDTO) -> {
+            System.out.println("\t|" + MovementsDTO.getId() + "\t|\t" + MovementsDTO.getType_movements() + "\t|"
+                    + transaction.getAmount() + "\t|\t" + MovementsDTO.getMove_date() + "\t|\t" + MovementsDTO.getDescription()
+                    +"\t|\t"); });
+
+        Keyboard.pressEnterToContinue();
 
     }
 
@@ -38,7 +54,7 @@ public class MovementView {
 
     public void showNewMovements(){}
 
-    public void getNewMovements(){
+    public HashMap<String, String> getNewMovements(List<Type_movementsDTO> typeMov){
         HashMap<String,String> data = new HashMap<>();
         TransactionDTO transaction = new TransactionDTO();
         Scanner scanner = Keyboard.getInstance();
@@ -62,6 +78,40 @@ public class MovementView {
         System.out.println(Ansi.RED);
         System.out.println("ADVERTENCIA || Los movimientos no se pueden modicifar o eliminar ||");
         System.out.println(Ansi.RESET);
+        return data;
+    }
+
+    public String printMovementsPerPage(List<MovementsDTO> movements, List<String> paginator, boolean showHeader) {
+        if (showHeader) {
+            System.out.println("\n+----------------------------------------------------------------+");
+            System.out.println("\t  Bank - Rota :: Modulo Movimientos :: Lista de Movimientos");
+            System.out.println("+----------------------------------------------------------------+\n");
+        }
+
+        System.out.println("Los primeros 7 Movimientos son: ");
+        movements.forEach((MovementsDTO) -> {
+            System.out.println("\t|" + MovementsDTO.getId() + "\t|\t" + MovementsDTO.getType_movements() + "\t|"
+                    + transaction.getAmount() + "\t|\t" + MovementsDTO.getMove_date() + "\t|\t" + MovementsDTO.getDescription()
+                    +"\t|\t"); });
+        Scanner keyboard = Keyboard.getInstance();
+
+        while (true){
+            try {
+                System.out.print("? ");
+                String name = keyboard.nextLine().trim();
+                while (!name.matches("^[0-9IiAaSsUuEeqQ]+$") && !name.isEmpty()) {
+                    MainView.chooseValidOption();
+                    System.out.print("? ");
+                    name = keyboard.nextLine();
+                }
+                return name;
+            } catch (InputMismatchException e) {
+                MainView.chooseValidOption();
+                keyboard.next();
+            }
+
         }
     }
+}
+
 

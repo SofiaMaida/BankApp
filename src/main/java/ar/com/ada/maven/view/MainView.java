@@ -19,6 +19,15 @@ public class MainView {
         return Integer.valueOf(Keyboard.getInputInteger());
     }
 
+    public int menuMovementSelectOption(){
+        System.out.println("Seleccione una opción: " +
+                "\n| 1 | ¿Desea ingresar un nuevo usuario?" +
+                "\n| 2 | ¿Desea ingresar con su usuario?" +
+                "\n| 3 | Salir");
+
+        return Integer.valueOf(Keyboard.getInputInteger());
+    }
+
     public static void chooseValidOption() {
         System.out.println("Error, debe ingresar un dato válido");
         System.out.println(Ansi.RESET);

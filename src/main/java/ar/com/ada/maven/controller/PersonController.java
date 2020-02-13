@@ -152,7 +152,7 @@ public class PersonController {
 
             if (!nameToUpdate.isEmpty()) {
                 personDAO.findByDni(Integer.parseInt(nameToUpdate));
-                person.setNumber_doc(nameToUpdate);
+                person.setNumber_doc(Integer.valueOf(nameToUpdate));
                 Boolean isSaved = personDAO.update(person, id);
                 if (isSaved)
                     view.showUpdateData(person.getName(), person.getLastName(), person.getNumber_doc());

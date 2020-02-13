@@ -64,7 +64,7 @@ public class PersonDTO {
         return lastName;
     }
 
-    public void setNumber_doc(String number_doc) {
+    public void setNumber_doc(Integer number_doc) {
         this.number_doc = number_doc;
     }
 

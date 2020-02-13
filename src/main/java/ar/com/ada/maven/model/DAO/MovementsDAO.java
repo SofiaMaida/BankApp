@@ -8,6 +8,8 @@ import ar.com.ada.maven.model.DTO.Type_movementsDTO;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 
 public class MovementsDAO implements DAO<MovementsDTO> {
@@ -43,6 +45,7 @@ public class MovementsDAO implements DAO<MovementsDTO> {
         }
         return movements;
     }
+
 
     @Override
     public MovementsDTO findById(Integer id) {
@@ -130,4 +133,47 @@ public class MovementsDAO implements DAO<MovementsDTO> {
         }
         return hasDelete == 1;
     }
+
+    public int getTotalMovements() {
+        String sql = "SELECT COUNT(*) AS total FROM movements";
+        int total = 0;
+        try {
+            Connection connection = DBConnection.getConnection();
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(sql);
+            if (rs.next())  total = rs.getInt("total");
+            connection.close();
+        } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+            System.out.println("CONNECTION ERROR GET TOTAL PERSONS: " + e.getMessage());
+        }
+
+        return total;
+    }
+
+    public List<MovementsDTO> findAll(int limit, int offset) {
+        String sql = "SELECT * FROM Person LIMIT ? OFFSET ?";
+        List<MovementsDTO> movements = new ArrayList<>();
+
+        try {
+            Connection connection = DBConnection.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, limit);
+            preparedStatement.setInt(2, offset);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                Type_movementsDTO type_mov = type_movementsDAO.findById(rs.getInt("type_movements_id"));
+                BalanceDTO balance = balanceDAO.findById(rs.getInt("balance_id"));
+                AccountDTO account = accountDAO.findById(rs.getInt("account_id"));
+                MovementsDTO movDTO = new MovementsDTO(rs.getInt("id"), rs.getDate("date"),
+                        rs.getString("description"), balance, account, type_mov);
+                movements.add(movDTO);
+            }
+            connection.close();
+        } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+            System.out.println("CONNECTION ERROR FINDALL II PERSON: " + e.getMessage());
+        }
+
+        return movements ;
+    }
+
 }
