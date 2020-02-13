@@ -14,19 +14,12 @@ public class MainView {
         System.out.println("Seleccione una opción: " +
                 "\n| 1 | ¿Desea ingresar un nuevo usuario?" +
                 "\n| 2 | ¿Desea ingresar con su usuario?" +
-                "\n| 3 | Salir");
+                "\n| 3 | ¿Desea realizar un movimiento?" +
+                "\n| 4 | Salir");
 
         return Integer.valueOf(Keyboard.getInputInteger());
     }
 
-    public int menuMovementSelectOption(){
-        System.out.println("Seleccione una opción: " +
-                "\n| 1 | ¿Desea ingresar un nuevo usuario?" +
-                "\n| 2 | ¿Desea ingresar con su usuario?" +
-                "\n| 3 | Salir");
-
-        return Integer.valueOf(Keyboard.getInputInteger());
-    }
 
     public static void chooseValidOption() {
         System.out.println("Error, debe ingresar un dato válido");

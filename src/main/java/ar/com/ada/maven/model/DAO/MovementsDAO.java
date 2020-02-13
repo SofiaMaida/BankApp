@@ -34,7 +34,8 @@ public class MovementsDAO implements DAO<MovementsDTO> {
                 AccountDTO account = accountDAO.findById(rs.getInt("Account_id"));
                 BalanceDTO balance = balanceDAO.findById(rs.getInt("Balance_id"));
                 Type_movementsDTO type_movements = type_movementsDAO.findById(rs.getInt("Type_movements_id"));
-                MovementsDTO movementsDTO = new MovementsDTO(rs.getInt("id"), rs.getDate("move_date"), rs.getString("description"),
+                MovementsDTO movementsDTO = new MovementsDTO(rs.getInt("id"),
+                        rs.getDate("move_date"), rs.getDouble("amount"), rs.getString("description"),
                         balance, account, type_movements);
                 movements.add(movementsDTO);
             }
@@ -62,7 +63,7 @@ public class MovementsDAO implements DAO<MovementsDTO> {
                 Type_movementsDTO type_movements = type_movementsDAO.findById(rs.getInt("Type_movements_id"));
 
                 movements = new MovementsDTO(rs.getInt("id"), rs.getDate("move_date"),
-                        rs.getString("description"), balance, account, type_movements);
+                        rs.getDouble("amount"),rs.getString("description"), balance, account, type_movements);
             }
             if (willCloseConnection) connection.close();
 
@@ -80,10 +81,11 @@ public class MovementsDAO implements DAO<MovementsDTO> {
             Connection connection = DBConnection.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setDate(1, movementsDTO.getMove_date());
-            preparedStatement.setString(2, movementsDTO.getDescription());
-            preparedStatement.setInt(3, movementsDTO.getAccount().getId());
-            preparedStatement.setInt(4, movementsDTO.getBalance().getId());
-            preparedStatement.setInt(5, movementsDTO.getType_movements().getId());
+            preparedStatement.setDouble(2, movementsDTO.getAmount());
+            preparedStatement.setString(3, movementsDTO.getDescription());
+            preparedStatement.setInt(4, movementsDTO.getAccount().getId());
+            preparedStatement.setInt(5, movementsDTO.getBalance().getId());
+            preparedStatement.setInt(6, movementsDTO.getType_movements().getId());
             affectedRows = preparedStatement.executeUpdate();
             connection.close();
         } catch (Exception e) {
@@ -101,12 +103,14 @@ public class MovementsDAO implements DAO<MovementsDTO> {
             Connection connection = DBConnection.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setDate(1, movementsDTO.getMove_date());
-            preparedStatement.setString(2, movementsDTO.getDescription());
-            preparedStatement.setInt(3, movementsDTO.getAccount().getId());
-            preparedStatement.setInt(4, movementsDTO.getBalance().getId());
-            preparedStatement.setInt(5, movementsDTO.getType_movements().getId());
+            preparedStatement.setDouble(2, movementsDTO.getAmount());
+            preparedStatement.setString(3, movementsDTO.getDescription());
+            preparedStatement.setInt(4, movementsDTO.getAccount().getId());
+            preparedStatement.setInt(5, movementsDTO.getBalance().getId());
+            preparedStatement.setInt(6, movementsDTO.getType_movements().getId());
 
             if (!(movementsDTO.getMove_date().equals(movementsDB.getMove_date()) &&
+                    movementsDTO.getAmount().equals(movementsDB.getAmount()) &&
                     movementsDTO.getDescription().equals(movementsDB.getDescription()) &&
                     movementsDTO.getAccount().equals(movementsDB.getAccount()) &&
                     movementsDTO.getBalance().equals(movementsDB.getBalance()) &&
@@ -165,7 +169,7 @@ public class MovementsDAO implements DAO<MovementsDTO> {
                 BalanceDTO balance = balanceDAO.findById(rs.getInt("balance_id"));
                 AccountDTO account = accountDAO.findById(rs.getInt("account_id"));
                 MovementsDTO movDTO = new MovementsDTO(rs.getInt("id"), rs.getDate("date"),
-                        rs.getString("description"), balance, account, type_mov);
+                        rs.getDouble("amount"), rs.getString("description"), balance, account, type_mov);
                 movements.add(movDTO);
             }
             connection.close();

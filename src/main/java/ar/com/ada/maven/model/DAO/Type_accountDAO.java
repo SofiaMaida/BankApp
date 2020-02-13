@@ -20,7 +20,7 @@ public class Type_accountDAO implements DAO<Type_accountDTO> {
     }
 
     @Override
-    public Collection<Type_accountDTO> findAll() {
+    public List<Type_accountDTO> findAll() {
         String sql = "SELECT * FROM type_account";
         List<Type_accountDTO> types = new ArrayList<>();
         try {
@@ -114,5 +114,7 @@ public class Type_accountDAO implements DAO<Type_accountDTO> {
 
         return hasErased == 1;
     }
+
+
 }
 

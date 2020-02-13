@@ -6,21 +6,17 @@ import ar.com.ada.maven.model.DTO.Type_movementsDTO;
 import ar.com.ada.maven.utils.Ansi;
 import ar.com.ada.maven.utils.Keyboard;
 
-import java.util.HashMap;
-import java.util.InputMismatchException;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class MovementView {
 
-    private static TransactionDTO transaction = new TransactionDTO();
-
-    public int movementsMenu(){
+        public int movementsMenu(){
         System.out.println(" - BANK ROTA - Modulo Movimientos: \n");
         System.out.println(" -> Seleccione un opción del menú: " +
                 "\n| 1 | ¿Hacer un movimiento nuevo?" +
-                "\n| 2 | Consultar movimientos" +
-                "\n| 3 | Salir. ");
+                "\n| 2 | Consultar movimientos recientes" +
+                "\n| 3 | Consultar todos los movimientos" +
+                "\n| 4 | Salir. ");
 
         Scanner keyboard = Keyboard.getInstance();
         while (true) {
@@ -43,20 +39,15 @@ public class MovementView {
 
         movements.forEach((MovementsDTO) -> {
             System.out.println("\t|" + MovementsDTO.getId() + "\t|\t" + MovementsDTO.getType_movements() + "\t|"
-                    + transaction.getAmount() + "\t|\t" + MovementsDTO.getMove_date() + "\t|\t" + MovementsDTO.getDescription()
+                    + MovementsDTO.getAmount() + "\t|\t" + MovementsDTO.getMove_date() + "\t|\t" + MovementsDTO.getDescription()
                     +"\t|\t"); });
 
         Keyboard.pressEnterToContinue();
 
     }
 
-    public void printMenuTypeMov(){}
-
-    public void showNewMovements(){}
-
     public HashMap<String, String> getNewMovements(List<Type_movementsDTO> typeMov){
         HashMap<String,String> data = new HashMap<>();
-        TransactionDTO transaction = new TransactionDTO();
         Scanner scanner = Keyboard.getInstance();
 
         System.out.println(" | Bienvenidos al creador de MOVIMIENTOS en tu actual cuenta |");
@@ -66,7 +57,6 @@ public class MovementView {
         data.put("type_AccountDTO", Keyboard.getInputInteger());
 
         System.out.println("Ingrese el monto por realizar:\n ");
-        //INSTANCIAR EL GET AMOUNT PARA GUARDARLO EN LA BASE DE DATOS
         data.put("Amount", Keyboard.getInputDouble());
 
         System.out.println("Ingresar la fecha:\n");
@@ -91,7 +81,7 @@ public class MovementView {
         System.out.println("Los primeros 7 Movimientos son: ");
         movements.forEach((MovementsDTO) -> {
             System.out.println("\t|" + MovementsDTO.getId() + "\t|\t" + MovementsDTO.getType_movements() + "\t|"
-                    + transaction.getAmount() + "\t|\t" + MovementsDTO.getMove_date() + "\t|\t" + MovementsDTO.getDescription()
+                    + MovementsDTO.getAmount() + "\t|\t" + MovementsDTO.getMove_date() + "\t|\t" + MovementsDTO.getDescription()
                     +"\t|\t"); });
         Scanner keyboard = Keyboard.getInstance();
 
@@ -112,6 +102,20 @@ public class MovementView {
 
         }
     }
+
+    public void updateMovementCanceled() {
+        System.out.println("Se canceló el movimiento");
+        Keyboard.pressEnterToContinue();
+    }
+
+    public void showNewMovements(MovementsDTO movements) {
+        System.out.println("Los datos registrados son: \n Tipo de movimiento " + movements.getType_movements() +
+                "\n: Monto " + movements.getAmount() +
+                "\n Fecha " + movements.getMove_date() + "\n Concepto " + movements.getDescription());
+        Keyboard.pressEnterToContinue();
+    }
+
+
 }
 
 

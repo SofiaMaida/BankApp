@@ -19,6 +19,9 @@ public class MainController {
                 case 2:
                     personList();
                     break;
+                case 3:
+                    MovementController.init();
+                    break;
                 case 4: shoulGetOut = true;
                 break;
                 default:

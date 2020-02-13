@@ -11,18 +11,30 @@ public class MovementsDTO {
     private BalanceDTO balance;
     private AccountDTO account;
     private Type_movementsDTO type_movements;
+    private Double amount;
 
     public MovementsDTO() {
     }
 
-    public MovementsDTO(int id, Date move_date, String description, BalanceDTO balance_id, AccountDTO account_id, Type_movementsDTO type_movements_id) {
+    public MovementsDTO(int id, Date move_date, Double amount, String description, BalanceDTO balance_id, AccountDTO account_id,
+                        Type_movementsDTO type_movements_id) {
         this.id = id;
         this.move_date = move_date;
         this.description = description;
         this.balance = balance_id;
         this.account = account_id;
         this.type_movements = type_movements_id;
+        this.amount = amount;
     }
+
+    public MovementsDTO(Type_movementsDTO type_movements_id, Double amount, Date move_date, String description) {
+
+        this.move_date = move_date;
+        this.description = description;
+        this.type_movements = type_movements_id;
+        this.amount = amount;
+    }
+
 
     public int getId() {
         return id;
@@ -70,6 +82,14 @@ public class MovementsDTO {
 
     public void setType_movements(Type_movementsDTO type_movements) {
         this.type_movements = type_movements;
+    }
+
+    public Double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(Double amount) {
+        this.amount = amount;
     }
 
     @Override

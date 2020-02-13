@@ -1,16 +1,16 @@
 package ar.com.ada.maven.controller;
 
 
-import ar.com.ada.maven.model.DAO.MovementsDAO;
-import ar.com.ada.maven.model.DAO.Type_movementsDAO;
-import ar.com.ada.maven.model.DTO.MovementsDTO;
-import ar.com.ada.maven.model.DTO.Type_movementsDTO;
+import ar.com.ada.maven.model.DAO.*;
+import ar.com.ada.maven.model.DTO.*;
 import ar.com.ada.maven.utils.Paginator;
 import ar.com.ada.maven.view.MainView;
 import ar.com.ada.maven.view.MovementView;
 
 import java.io.IOException;
+import java.time.Instant;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -19,6 +19,7 @@ public class MovementController {
     private static MovementView view = new MovementView();
     private static MovementsDAO movDAO = new MovementsDAO();
     private static Type_movementsDAO typeMovDAO = new Type_movementsDAO(true);
+    private static Type_accountDAO typeAccDAO = new Type_accountDAO(true);
 
     public static void init() {
         Boolean des = false;
@@ -44,7 +45,20 @@ public class MovementController {
     public static void createNewMovement() {
         List<Type_movementsDTO> typeMov = (List<Type_movementsDTO>) typeMovDAO.findAll();
         HashMap<String, String> movement = view.getNewMovements(typeMov);
+        if (!movement.isEmpty()){
+            int typeMovID = Integer.parseInt(movement.get("type_movement"));
+            Type_movementsDTO type = typeMovDAO.findById(typeMovID);
+            Date now = Date.from(Instant.now());
+            Double amount = Double.parseDouble(movement.get("amount"));
+
+
+            MovementsDTO newMovement = new MovementsDTO(type, amount, now, movement.get("description"));
+            Boolean isSaved = movDAO.save(newMovement);
+            if (isSaved)
+            view.showNewMovements(newMovement);
+            else view.updateMovementCanceled();
         }
+        view.updateMovementCanceled();
     }
 
     public static void listAllMovements() {
