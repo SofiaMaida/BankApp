@@ -1,13 +1,15 @@
 package ar.com.ada.maven.model.DTO;
 
+import java.util.Objects;
+
 public class PersonDTO {
 
     private Integer id;
     private String name, lastName;
-    private Integer number_doc;
+    private int number_doc;
     private DocumentationDTO document_type;
 
-    public PersonDTO(String clientName){}
+    public PersonDTO(String name, String clientName, int number_doc){}
 
     public PersonDTO(Integer id, String name){
         this.id = id;
@@ -64,11 +66,11 @@ public class PersonDTO {
         return lastName;
     }
 
-    public void setNumber_doc(Integer number_doc) {
+    public void setNumber_doc(int number_doc) {
         this.number_doc = number_doc;
     }
 
-    public Integer getNumber_doc() {
+    public int getNumber_doc() {
         return number_doc;
     }
 
@@ -81,25 +83,26 @@ public class PersonDTO {
     }
 
     @Override
-    public int hashCode() {
-        return -220 * id.hashCode() + name.hashCode() + lastName.hashCode() +  number_doc.hashCode() + document_type.hashCode();
-    }
-
-    @Override
     public String toString() {
         return "PERSON: [-id " + id + " - nombre: " + name + " - apellido: " + lastName + " - DNI: " + number_doc + "Tipo de documento: "
         + document_type + "]";
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null || getClass() != obj.getClass()) return false;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PersonDTO personDTO = (PersonDTO) o;
+        return number_doc == personDTO.number_doc &&
+                Objects.equals(id, personDTO.id) &&
+                Objects.equals(name, personDTO.name) &&
+                Objects.equals(lastName, personDTO.lastName) &&
+                Objects.equals(document_type, personDTO.document_type);
+    }
 
-        PersonDTO that = (PersonDTO) obj;
-
-        return id.equals(that.id) && name.equals(that.name) && lastName.equals(that.lastName)
-                && number_doc.equals(that.number_doc)&& document_type.equals(that.document_type);
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, lastName, number_doc, document_type);
     }
 }
 
