@@ -1,6 +1,5 @@
 package ar.com.ada.maven.controller;
 
-import ar.com.ada.maven.model.DAO.ContactDAO;
 import ar.com.ada.maven.model.DAO.DocumentationDAO;
 import ar.com.ada.maven.model.DAO.PersonDAO;
 import ar.com.ada.maven.model.DTO.DocumentationDTO;
@@ -46,21 +45,20 @@ public class PersonController {
 
     public static void personList() {
         personListPerPage(null, true);
-       // List<PersonDTO> person = personDAO.findAll();
-        //view.printAllPerson(person);
-    }
+       }
 
     public static void createNewClient() {
-        HashMap<String, String> client = view.getNewClient();
+        List <DocumentationDTO> typesDoc = docDAO.findAll();
+        HashMap<String, String> client = view.getNewClient(typesDoc);
         if (!client.isEmpty()) {
 
             int number_doc = Integer.parseInt(client.get("number_doc"));
-            int type_doc = Integer.parseInt(client.get("documentation_type"));
-
-            PersonDTO newPerson = new PersonDTO(client.get("name"), client.get("lastName"), number_doc);
-            PersonDTO byNumberDoc = personDAO.findByDni(number_doc);
+            int typeDocID = Integer.parseInt(client.get("documentation_type"));
             // como mostrar los tipos de documento
-            DocumentationDTO type = docDAO.findById(type_doc);
+            DocumentationDTO type = docDAO.findById(typeDocID);
+
+            PersonDTO newPerson = new PersonDTO(client.get("name"), client.get("lastName"), number_doc, type);
+            PersonDTO byNumberDoc = personDAO.findByDni(number_doc);
             if (byNumberDoc != null) {
                 view.clientAlreadyExists(newPerson.getName(), newPerson.getLastName(), newPerson.getNumber_doc());
             } else {
@@ -86,7 +84,7 @@ public class PersonController {
     }
 
     private static void deletePerson() {
-        String optionDelete = "[" + "E" + Ansi.RESET + "liminar]";
+        String optionDelete = "[" + Ansi.CYAN + "E" + Ansi.RESET + "liminar]";
         int personIdToDelete = personListPerPage(optionDelete, true);
         if (personIdToDelete != 0)
             deleteSelectedPerson(personIdToDelete);

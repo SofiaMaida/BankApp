@@ -7,6 +7,7 @@ import ar.com.ada.maven.model.DTO.PersonDTO;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class PersonDAO implements DAO<PersonDTO> {
 
@@ -30,7 +31,7 @@ public class PersonDAO implements DAO<PersonDTO> {
             while (rs.next()) {
                 DocumentationDTO type_doc = docDAO.findById(rs.getInt("documentation_id"));
                 PersonDTO person = new PersonDTO(rs.getInt("id"),
-                        rs.getString("name"), rs.getString("lastName"),
+                        rs.getString("name"), rs.getString("last_name"),
                         rs.getInt("number_doc"), type_doc);
                 persons.add(person);
             }
@@ -49,12 +50,12 @@ public class PersonDAO implements DAO<PersonDTO> {
         try {
             Connection conn = DBConnection.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setInt(1,id);
+            ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 DocumentationDTO type = docDAO.findById(rs.getInt("documentation_id"));
                 person = new PersonDTO(rs.getInt("id"), rs.getString("name"),
-                        rs.getString("lastName"), rs.getInt("number_doc"), type);
+                        rs.getString("last_name"), rs.getInt("number_doc"), type);
             }
             if (willCloseConnection)
                 conn.close();
@@ -67,15 +68,15 @@ public class PersonDAO implements DAO<PersonDTO> {
 
     @Override
     public Boolean save(PersonDTO personDTO) {
-        String sql = "INSERT INTO person (name, lastName, number_doc) VALUES (?,?,?)";
+        String sql = "INSERT INTO person (name, last_name, number_doc, documentation_id) VALUES (?,?,?,?)";
         int hasInsert = 0;
         try {
             Connection conn = DBConnection.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1,personDTO.getName());
-            ps.setString(2,personDTO.getLastName());
-            ps.setInt(3,personDTO.getNumber_doc());
-            ps.setInt(4,personDTO.getDocument_type().getId());
+            ps.setString(1, personDTO.getName());
+            ps.setString(2, personDTO.getLastName());
+            ps.setInt(3, personDTO.getNumber_doc());
+            ps.setInt(4, personDTO.getDocument_type().getId());
             hasInsert = ps.executeUpdate();
             conn.close();
         } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
@@ -86,24 +87,26 @@ public class PersonDAO implements DAO<PersonDTO> {
 
     @Override
     public Boolean update(PersonDTO personDTO, Integer id) {
-        String sql = "UPDATE person SET name = ?, lastName = ?, number_doc = ? WHERE id = ?";
+        String sql = "UPDATE person SET name = ?, last_name = ?, number_doc = ? WHERE id = ?";
         int hasUpdate = 0;
         PersonDTO personDB = findById(id);
         try {
             Connection conn = DBConnection.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1,personDTO.getName());
-            ps.setString(2,personDTO.getLastName());
-            ps.setInt(3,personDTO.getNumber_doc());
-            if (!personDTO.getName().equals(personDB.getName()) && personDTO.getLastName().equals(personDB.getLastName())
-                    && personDTO.getNumber_doc().equals(personDB.getNumber_doc()));
+            ps.setString(1, personDTO.getName());
+            ps.setString(2, personDTO.getLastName());
+            ps.setInt(3, personDTO.getNumber_doc());
+
+            if (!(personDTO.getName().equals(personDB.getName()) &&
+                    Objects.equals(personDTO.getLastName(), personDB.getLastName()) &&
+                    Objects.equals(personDTO.getNumber_doc(), personDB.getNumber_doc())));
+
             hasUpdate = ps.executeUpdate();
             conn.close();
         } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
             System.out.println("CONNECTION ERROR: " + e.getMessage());
         }
-
-        return hasUpdate ==1;
+        return hasUpdate == 1;
     }
 
     @Override
@@ -113,7 +116,7 @@ public class PersonDAO implements DAO<PersonDTO> {
         try {
             Connection conn = DBConnection.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setInt(1,id);
+            ps.setInt(1, id);
             hasErased = ps.executeUpdate();
             conn.close();
         } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
@@ -154,7 +157,7 @@ public class PersonDAO implements DAO<PersonDTO> {
             Connection connection = DBConnection.getConnection();
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(sql);
-            if (rs.next())  total = rs.getInt("total");
+            if (rs.next()) total = rs.getInt("total");
             connection.close();
         } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
             System.out.println("CONNECTION ERROR GET TOTAL PERSONS: " + e.getMessage());
@@ -163,7 +166,7 @@ public class PersonDAO implements DAO<PersonDTO> {
         return total;
     }
 
-    public PersonDTO findByDni(int number_doc){
+    public PersonDTO findByDni(int number_doc) {
         String sql = "SELECT * FROM person WHERE number_doc = ?";
         PersonDTO numberDni = null;
         try {
@@ -177,7 +180,7 @@ public class PersonDAO implements DAO<PersonDTO> {
                 conn.close();
 
         } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
-            System.out.println("CONNECTION ERROR: " + e.getMessage());
+            System.out.println("CONNECTION ERROR findbyDNI: " + e.getMessage());
         }
         return numberDni;
     }

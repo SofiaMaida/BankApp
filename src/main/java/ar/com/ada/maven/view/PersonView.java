@@ -1,5 +1,6 @@
 package ar.com.ada.maven.view;
 
+import ar.com.ada.maven.model.DTO.DocumentationDTO;
 import ar.com.ada.maven.model.DTO.PersonDTO;
 import ar.com.ada.maven.utils.Ansi;
 import ar.com.ada.maven.utils.Keyboard;
@@ -24,21 +25,10 @@ public class PersonView {
         System.out.println("| 5 | Regresar el menú principal");
         System.out.println("-------------------------\n");
 
-        Scanner keyboard = Keyboard.getInstance();
-
-        while (true) {
-            try {
-                System.out.print("? ");
-                int choice = keyboard.nextInt();
-                return choice;
-            } catch (InputMismatchException e) {
-                System.out.println("Error, debe ingresar una opcion valida");
-                keyboard.next();
-            }
-        }
+        return Integer.valueOf(Keyboard.getInputInteger());
     }
 
-    public HashMap<String, String> getNewClient() {
+    public HashMap<String, String> getNewClient(List<DocumentationDTO> typesDoc) {
         HashMap<String, String> data = new HashMap<>();
 
         System.out.println("Formulario para comenzar a ser cliente de Bank Rota");
@@ -49,10 +39,8 @@ public class PersonView {
         data.put("lastName", Keyboard.getInputString());
 
         System.out.println("\nIngrese un tipo de documento: ");
-        System.out.println("\nMarcar 1: DNI");
-        System.out.println("\nMarcar 2: Pasaporte");
-        System.out.println("\nMarcar 3: CUIL");
-        System.out.println("\nMarcar 4: DNI Extranjero");
+        typesDoc.forEach(types ->
+                System.out.println("\t|" + types.getId() + "\t| "+ types.getDocumentation_type()));
         data.put("documentation_type", Keyboard.getInputInteger());
 
         System.out.println("\nIngrese su número de documento: ");
@@ -65,7 +53,7 @@ public class PersonView {
     }
 
     public void showNewClient(String name, String lastName, Integer numberDoc) {
-        System.out.println("Los datos registrados son -> \nNombre completo: " + name +
+        System.out.println("Los datos registrados son: \nNombre completo: " + name +
                 "\nApellido: " + lastName +
                 "\nNúmero de documento: " + numberDoc);
         Keyboard.pressEnterToContinue();
