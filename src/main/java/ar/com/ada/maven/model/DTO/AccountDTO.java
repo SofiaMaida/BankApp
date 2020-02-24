@@ -6,7 +6,7 @@ public class AccountDTO {
     private PersonDTO person;
     private Type_accountDTO type_account;
 
-    public AccountDTO(){
+    public AccountDTO(int id, String number_account){
     }
 
     public AccountDTO(Integer id, Integer number_account){
@@ -19,6 +19,18 @@ public class AccountDTO {
         this.number_account = number_account;
         this.person = person;
         this.type_account = type_account;
+    }
+
+    public AccountDTO(int id, String name, PersonDTO personDTO) {
+
+    }
+
+    public AccountDTO(String newAccountARG) {
+
+    }
+
+    public AccountDTO(String newAccountARG, PersonDTO personById) {
+
     }
 
     public PersonDTO getPerson() {
@@ -37,8 +49,8 @@ public class AccountDTO {
         return id;
     }
 
-    public Integer getNumber_account() {
-        return number_account;
+    public String getNumber_account() {
+        return String.valueOf(number_account);
     }
 
     public void setNumber_account(Integer number_account) {
