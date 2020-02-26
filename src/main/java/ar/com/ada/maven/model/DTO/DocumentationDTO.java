@@ -6,7 +6,7 @@ public class DocumentationDTO {
     private String documentation_type;
 
 
-    public DocumentationDTO(){
+    public DocumentationDTO(boolean b){
 
     }
 
@@ -20,7 +20,7 @@ public class DocumentationDTO {
         this.id = id;
     }
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 

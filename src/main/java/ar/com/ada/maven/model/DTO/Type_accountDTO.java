@@ -14,6 +14,10 @@ public class Type_accountDTO {
         this.type_account = type;
     }
 
+    public Type_accountDTO(boolean b) {
+
+    }
+
     public Integer getId() {
         return id;
     }

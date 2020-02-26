@@ -21,7 +21,7 @@ public class Keyboard {
     }
 
     public static void pressEnterToContinue() {
-        System.out.println("- Presiona la tecla ENTER para continuar -");
+        System.out.println(Ansi.YELLOW + "- Presiona la tecla ENTER para continuar -" + Ansi.RESET);
         try {
             System.in.read();
         } catch (IOException e) {

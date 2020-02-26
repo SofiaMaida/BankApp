@@ -11,9 +11,10 @@ public class MainView {
         System.out.println("\t** BIENVENIDOS A BANK ROTA **");
         System.out.println("--------------------------------------------------\n");
         System.out.println("Seleccione una opción: " +
-                "\n| 1 | Cliente" +
+                "\n| 1 | Clientes" +
                 "\n| 2 | Cuentas" +
-                "\n| 3 | Salir");
+                "\n| 3 | Movimientos" +
+                "\n| 4 | Salir");
 
         return Integer.valueOf(Keyboard.getInputInteger());
     }

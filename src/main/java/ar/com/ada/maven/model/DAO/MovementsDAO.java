@@ -18,7 +18,6 @@ public class MovementsDAO implements DAO<MovementsDTO> {
     public Type_movementsDAO type_movementsDAO = new Type_movementsDAO(false);
 
     public MovementsDAO(boolean b) {}
-    public MovementsDAO(){}
 
     @Override
     public ArrayList<MovementsDTO> findAll() {

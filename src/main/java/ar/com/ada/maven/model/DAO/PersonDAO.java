@@ -13,6 +13,7 @@ public class PersonDAO implements DAO<PersonDTO> {
 
     private Boolean willCloseConnection = true;
     private DocumentationDAO docDAO = new DocumentationDAO(false);
+    private DocumentationDTO docDTO = new DocumentationDTO(false);
 
     public PersonDAO() {
     }
@@ -60,7 +61,7 @@ public class PersonDAO implements DAO<PersonDTO> {
             if (willCloseConnection)
                 conn.close();
         } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
-            System.out.println("CONNECTION ERROR: " + e.getMessage());
+            System.out.println("CONNECTION ERROR FINDBYID: " + e.getMessage());
         }
 
         return person;
@@ -80,14 +81,14 @@ public class PersonDAO implements DAO<PersonDTO> {
             hasInsert = ps.executeUpdate();
             conn.close();
         } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
-            System.out.println("CONNECTION ERROR: " + e.getMessage());
+            System.out.println("CONNECTION ERROR SAVE: " + e.getMessage());
         }
         return hasInsert == 1;
     }
 
     @Override
     public Boolean update(PersonDTO personDTO, Integer id) {
-        String sql = "UPDATE person SET name = ?, last_name = ?, number_doc = ? WHERE id = ?";
+        String sql = "UPDATE person SET name = ?, last_name = ?, number_doc = ?, documentation_id = ? WHERE id = ?";
         int hasUpdate = 0;
         PersonDTO personDB = findById(id);
         try {
@@ -96,31 +97,28 @@ public class PersonDAO implements DAO<PersonDTO> {
             ps.setString(1, personDTO.getName());
             ps.setString(2, personDTO.getLastName());
             ps.setInt(3, personDTO.getNumber_doc());
+            ps.setString(4, String.valueOf(personDTO.getDocument_type().getId()));
+            ps.setInt(5, personDTO.getId());
 
-            if (!(personDTO.getName().equals(personDB.getName()) &&
-                    Objects.equals(personDTO.getLastName(), personDB.getLastName()) &&
-                    Objects.equals(personDTO.getNumber_doc(), personDB.getNumber_doc())));
-
+            if (!personDTO.equals(personDB))
             hasUpdate = ps.executeUpdate();
             conn.close();
         } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
-            System.out.println("CONNECTION ERROR: " + e.getMessage());
+            System.out.println("CONNECTION ERROR UPDATE: " + e.getMessage());
         }
         return hasUpdate == 1;
     }
 
-    @Override
     public Boolean delete(Integer id) {
-        String sql = "DELETE FROM person WHERE id = ?";
+        String sql = "DELETE FROM Person WHERE id = ?";
         int hasErased = 0;
         try {
             Connection conn = DBConnection.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setInt(1, id);
             hasErased = ps.executeUpdate();
-            conn.close();
-        } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
-            System.out.println("CONNECTION ERROR: " + e.getMessage());
+        } catch (Exception e) {
+            System.out.println("CONNECTION ERROR DELETE PERSON: " + e.getMessage());
         }
 
         return hasErased == 1;
@@ -166,7 +164,7 @@ public class PersonDAO implements DAO<PersonDTO> {
         return total;
     }
 
-    public PersonDTO findByDni(int number_doc) {
+    public PersonDTO findByDni(Integer number_doc) {
         String sql = "SELECT * FROM person WHERE number_doc = ?";
         PersonDTO numberDni = null;
         try {
@@ -184,4 +182,24 @@ public class PersonDAO implements DAO<PersonDTO> {
         }
         return numberDni;
     }
+
+    public PersonDTO findByName(String name) {
+        String sql = "SELECT * FROM person WHERE name = ?";
+        PersonDTO person = null;
+        try {
+            Connection conn = DBConnection.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, name);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next())
+                person = new PersonDTO(rs.getInt("id"), rs.getString("name"), rs.getString("last_name"));
+            if (willCloseConnection)
+                conn.close();
+
+        } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+            System.out.println("CONNECTION ERROR findbyNAME: " + e.getMessage());
+        }
+        return person;
+    }
+
 }

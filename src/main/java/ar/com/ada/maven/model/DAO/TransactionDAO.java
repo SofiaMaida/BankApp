@@ -6,7 +6,6 @@ import ar.com.ada.maven.model.DTO.TransactionDTO;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Collection;
 
 public class TransactionDAO implements DAO<TransactionDTO> {
 

@@ -9,11 +9,18 @@ public class PersonDTO {
     private int number_doc;
     private DocumentationDTO document_type;
 
-    public PersonDTO(String name, String clientName, int number_doc){}
-
-    public PersonDTO(Integer id, String name){
+    public PersonDTO(Integer id, String name, String lastName, int number_doc, DocumentationDTO document_type){
         this.id = id;
         this.name = name;
+        this.lastName = lastName;
+        this.number_doc = number_doc;
+        this.document_type = document_type;
+    }
+
+    public PersonDTO(String name, String lastName, int number_doc){
+        this.name = name;
+        this.lastName = lastName;
+        this.number_doc = number_doc;
     }
 
     public PersonDTO(Integer id, int number_doc) {
@@ -26,13 +33,6 @@ public class PersonDTO {
         this.id = id;
         this.name = name;
         this.lastName = lastName;
-    }
-
-    public PersonDTO(Integer id, String name, String lastName, int number_doc, DocumentationDTO document_type){
-        this.id = id;
-        this.name = name;
-        this.lastName = lastName;
-        this.number_doc = number_doc;
     }
 
     public PersonDTO(String name, String lastName, int number_doc, DocumentationDTO document_type){
@@ -50,12 +50,12 @@ public class PersonDTO {
         return id;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public void setLastName(String lastName) {
@@ -66,8 +66,8 @@ public class PersonDTO {
         return lastName;
     }
 
-    public void setNumber_doc(int number_doc) {
-        this.number_doc = number_doc;
+    public void setNumber_doc(String number_doc) {
+        this.number_doc = Integer.parseInt(number_doc);
     }
 
     public int getNumber_doc() {

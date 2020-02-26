@@ -1,6 +1,5 @@
 package ar.com.ada.maven.model.DAO;
 
-import java.sql.SQLException;
 import java.util.Collection;
 
 public interface DAO <T> {
