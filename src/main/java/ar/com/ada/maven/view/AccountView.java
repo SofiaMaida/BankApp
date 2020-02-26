@@ -35,8 +35,9 @@ public class AccountView {
             System.out.println("+----------------------------------------------------------------+\n");
         }
         System.out.println("|\tID\t|\tCUENTAS");
+        String numberAccountAR = "AR25 0064 0482 25 536398";
         accounts.forEach(account -> {
-                    System.out.println("|\t" + account.getId() + "\t|\t" + account.getNumber_account() + "\t|\t" +
+                    System.out.println("|\t" + account.getId() + "\t|\t" + numberAccountAR + account.getNumber_account() + "\t|\t" +
                             account.getPerson() + "\t|\t" + account.getType_account() + "\t|");
                 }
         );
@@ -79,16 +80,31 @@ public class AccountView {
         System.out.println("| 1 | Si");
         System.out.println("| 2 | No");
 
-        return Boolean.valueOf(Keyboard.getInputInteger());
+        keyboard.nextLine();
+
+        while (true) {
+            try {
+                System.out.print("? ");
+                String name = keyboard.nextLine().trim();
+                while (!name.matches("^[1-2]+$") && !name.isEmpty()) {
+                    System.out.println("Error, debe ingresar una opcion valida");
+                    name = keyboard.nextLine();
+                }
+                return "1".equals(name);
+            } catch (InputMismatchException e) {
+                System.out.println("Error, debe ingresar una opcion valida");
+                keyboard.next();
+            }
+        }
     }
 
     public void showDeleteAccount(String person) {
-        System.out.println(Ansi.GREEN + "La cuenta se ha eliminado exitosamente" + Ansi.RESET);
+        System.out.println(Ansi.GREEN + "La cuenta se ha eliminado exitosamente\n" + Ansi.RESET);
         Keyboard.pressEnterToContinue();
     }
 
     public void deleteAccountCanceled() {
-        System.out.println(Ansi.RED + "Ha cancelado la elimincacion de la cuenta" + Ansi.RESET);
+        System.out.println(Ansi.RED + "Ha cancelado la elimincacion de la cuenta\n" + Ansi.RESET);
         Keyboard.pressEnterToContinue();
     }
 
@@ -101,7 +117,7 @@ public class AccountView {
         HashMap<String, String> data = new HashMap<>();
 
         System.out.println("\nIngrese por favor al azar 4 digitos " +
-                Ansi.RED + " \n[NO PODRAN SER NUMEROS CONSECUTIVOS, NI REPETIDOS]: " + Ansi.RESET);
+                Ansi.RED + " \n[NO PODRAN SER NUMEROS CONSECUTIVOS, NI REPETITIVOS]: " + Ansi.RESET);
         data.put("number_account", Keyboard.getInputInteger());
 
         System.out.println("\nSeleccione su usuario: ");

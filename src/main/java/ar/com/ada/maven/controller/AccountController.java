@@ -4,7 +4,6 @@ import ar.com.ada.maven.model.DAO.AccountDAO;
 import ar.com.ada.maven.model.DAO.PersonDAO;
 import ar.com.ada.maven.model.DAO.Type_accountDAO;
 import ar.com.ada.maven.model.DTO.AccountDTO;
-import ar.com.ada.maven.model.DTO.MovementsDTO;
 import ar.com.ada.maven.model.DTO.PersonDTO;
 import ar.com.ada.maven.model.DTO.Type_accountDTO;
 import ar.com.ada.maven.utils.Paginator;
@@ -12,7 +11,6 @@ import ar.com.ada.maven.view.AccountView;
 import ar.com.ada.maven.view.MainView;
 import ar.com.ada.maven.view.TypeAccountView;
 
-import java.lang.reflect.Type;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -24,9 +22,9 @@ public class AccountController {
     private static AccountView view = new AccountView();
     private static TypeAccountView typeAccountView = new TypeAccountView();
     private static PersonDAO personDAO = new PersonDAO();
-   // private static TypeAccountController typeAccountController = new TypeAccountController();
     private static Type_accountDAO type_accountDAO = new Type_accountDAO(false);
     private static AccountDAO accountDAO = new AccountDAO(false);
+    private static Type_accountDTO Type_accountDTO = new Type_accountDTO(false);
 
     static void init() {
         boolean shouldGetOut = false;
@@ -56,15 +54,27 @@ public class AccountController {
         listAccountPerPage(null, true);
     }
 
-
     public static void createNewAccount() {
         List<PersonDTO> person = personDAO.findAll();
         Collection<Type_accountDTO> typeAccount = type_accountDAO.findAll();
         HashMap<String, String> account = view.getNewAccount(person, typeAccount);
-        if (!account.isEmpty()) {
+        String numberAccountAR = "AR25 0064 0482 25 536398";
 
+        if (!account.isEmpty()) {
             int personId = Integer.parseInt(account.get("person_id"));
             int typeAccountId = Integer.parseInt(account.get("type_account_id"));
+
+            /*String option = typeAccountView.typeAccountSelectOption(typeAccount);
+            switch (option) {
+                case "1":
+                    String numberAccountAR = "AR AR25 0064 0482 25 536398";
+                    break;
+                case "2":
+                    String numberAccountEU = "EU AR25 0064 0482 25 536397";
+                    break;
+                case "3":
+                    String numberAccountDO = "DO AR25 0064 0482 25 536396";
+            }*/
 
             PersonDTO persons = personDAO.findById(personId);
             Type_accountDTO typeAccountDTO = type_accountDAO.findById(typeAccountId);
@@ -73,11 +83,11 @@ public class AccountController {
             AccountDTO byAccount = accountDAO.findByNumberAccount(String.valueOf(personId));
 
             if (byAccount != null) {
-                typeAccountView.accountAlreadyExists(newAccount.getNumber_account());
+                typeAccountView.accountAlreadyExists(numberAccountAR + newAccount.getNumber_account());
             } else {
                 Boolean isSaved = accountDAO.save(newAccount);
                 if (isSaved) {
-                    typeAccountView.showNewAccount(newAccount.getNumber_account());
+                    typeAccountView.showNewAccount(numberAccountAR + newAccount.getNumber_account() + " " + newAccount.getType_account());
                 } else {
                     typeAccountView.newAccountCanceled();
                 }
@@ -88,7 +98,6 @@ public class AccountController {
         }
 
     }
-
 
     private static int listAccountPerPage(String optionSelectDelete, boolean showHeader) {
         int limit = 3, currentPage = 0, totalAccount, totalPages, personIdSelected = 0;
