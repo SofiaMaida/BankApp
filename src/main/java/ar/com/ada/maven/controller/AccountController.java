@@ -4,13 +4,20 @@ import ar.com.ada.maven.model.DAO.AccountDAO;
 import ar.com.ada.maven.model.DAO.PersonDAO;
 import ar.com.ada.maven.model.DAO.Type_accountDAO;
 import ar.com.ada.maven.model.DTO.AccountDTO;
+import ar.com.ada.maven.model.DTO.MovementsDTO;
 import ar.com.ada.maven.model.DTO.PersonDTO;
+import ar.com.ada.maven.model.DTO.Type_accountDTO;
 import ar.com.ada.maven.utils.Paginator;
 import ar.com.ada.maven.view.AccountView;
 import ar.com.ada.maven.view.MainView;
 import ar.com.ada.maven.view.TypeAccountView;
 
+import java.lang.reflect.Type;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+
+import static java.lang.Integer.parseInt;
 
 public class AccountController {
 
@@ -27,15 +34,18 @@ public class AccountController {
             int option = view.accountMenuSelectOption();
             switch (option) {
                 case 1:
-                    createNewAccount();
+                    listAllAccounts();
                     break;
                 case 2:
-                    loginToAccount();
+                    createNewAccount();
                     break;
                 case 3:
-                    deleteAccount();
+                    loginToAccount();
                     break;
                 case 4:
+                    deleteAccount();
+                    break;
+                case 5:
                     shouldGetOut = true;
                     break;
                 default:
@@ -45,49 +55,55 @@ public class AccountController {
         }
     }
 
+    private static void listAllAccounts() {
+        listAccountPerPage(null, true);
+    }
+
+
     public static void createNewAccount() {
         List<PersonDTO> person = personDAO.findAll();
-        String newAccount = typeAccountView.getNewAccountARG();
+        Collection<Type_accountDTO> typeAccount = type_accountDAO.findAll();
+        HashMap<String, String> account = view.getNewAccount(person, typeAccount);
+        if (!account.isEmpty()) {
 
-        if (!newAccount.isEmpty()) {
-            typeAccountView.choiceAccountId();                                                      //selecciona el usuario
+            int personId = Integer.parseInt(account.get("person_id"));
+            int typeAccountId = Integer.parseInt(account.get("type_account_id"));
 
-            int accountId = PersonController.personListPerPage(Paginator.SELECT, false);            //enlista clientes
+            PersonDTO persons = personDAO.findById(personId);
+            Type_accountDTO typeAccountDTO = type_accountDAO.findById(typeAccountId);
 
-            if (accountId != 0) {
-                AccountDTO byName = accountDAO.findByNumberAccount(newAccount);
-                PersonDTO byId = personDAO.findById(accountId);
+            AccountDTO newAccount = new AccountDTO(account.get("numberAccount"), persons, typeAccountDTO);
+            AccountDTO byAccount = accountDAO.findByNumberAccount(String.valueOf(personId));
 
-                AccountDTO accountDTO = new AccountDTO(newAccount, byId);
-
-                if (byName != null && byName.equals(accountDTO)) {
-                    typeAccountView.accountAlreadyExists(accountDTO.getNumber_account());
-                } else {
-                    Boolean isSaved = accountDAO.save(accountDTO);
-                    if (isSaved)
-                        typeAccountView.showNewAccount(accountDTO.getNumber_account());
-                }
+            if (byAccount != null) {
+                typeAccountView.accountAlreadyExists(newAccount.getNumber_account());
             } else {
-                typeAccountView.newAccountCanceled();
+                Boolean isSaved = accountDAO.save(newAccount);
+                if (isSaved) {
+                    typeAccountView.showNewAccount(newAccount.getNumber_account());
+                } else {
+                    typeAccountView.newAccountCanceled();
+                }
             }
+
         } else {
             typeAccountView.newAccountCanceled();
-
         }
 
 
 
-        /*//enlistar los clientes para seleccionar quien es y crear la cuenta
-        List<PersonDTO> person = personDAO.findAll();
-        //pide los numeros para la cuenta y los almacena en new accountARG NO DEBERIA PASAR DE UNA
-        String newAccountARG = typeAccountView.getNewAccountARG(person);
+
+
+
+
+        /*Collection<Type_accountDTO> typeAccount = type_accountDAO.findAll();
+        //pide el tipo de cuenta que quiere y lo guarda en la variable newAccountARG
+        String newAccountARG = typeAccountView.typeAccountMenuSelectOption((List<Type_accountDTO>) typeAccount);
         String numberAccount = "AR25 0064 0482 25 536398";
 
-        //llamar al menu de opciones de typeAccountView
-        //typeAccountView.typeAccountMenuSelectOption();
-
         if (!newAccountARG.isEmpty()) {
-            //typeAccountView.choiceAccountId(person);
+            //enlista los clientes para seleccionar
+            typeAccountView.choiceAccountId();
             int personId = PersonController.personListPerPage(Paginator.SELECT, false);
 
             if (personId != 0) {
@@ -112,10 +128,12 @@ public class AccountController {
     }
 
     private static void loginToAccount() {
-        //List<AccountDTO> account;
-
-        //view.printPersonPerPage(account, paginator);
-        //findByDNI
+        List<MovementsDTO> movementsList;
+        //enlistar a clientes
+        typeAccountView.choiceAccountId();
+        int personId = PersonController.personListPerPage(Paginator.SELECT, false);
+        //selecciona e ingresa a movimientos
+        //view.movements
 
     }
 
@@ -163,7 +181,7 @@ public class AccountController {
                     break;
                 default:
                     if (choice.matches("^-?\\d+$")) {
-                        int page = Integer.parseInt(choice);
+                        int page = parseInt(choice);
                         if (page > 0 && page <= totalPages) currentPage = page - 1;
                     } else MainView.chooseValidOption();
             }
@@ -204,7 +222,7 @@ public class AccountController {
             if (toDelete) {
                 Boolean isDelete = accountDAO.delete(accountToDelete.getId());
                 if (isDelete)
-                    view.showDeleteAccount(accountToDelete.getPerson());
+                    view.showDeleteAccount(accountToDelete.getNumber_account());
             }
         } else {
             view.deleteAccountCanceled();

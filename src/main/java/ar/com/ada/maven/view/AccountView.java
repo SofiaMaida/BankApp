@@ -2,13 +2,12 @@ package ar.com.ada.maven.view;
 
 import ar.com.ada.maven.model.DTO.AccountDTO;
 import ar.com.ada.maven.model.DTO.PersonDTO;
+import ar.com.ada.maven.model.DTO.Type_accountDTO;
 import ar.com.ada.maven.utils.Ansi;
 import ar.com.ada.maven.utils.Keyboard;
 import ar.com.ada.maven.utils.Paginator;
 
-import java.util.InputMismatchException;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class AccountView {
 
@@ -20,29 +19,37 @@ public class AccountView {
         System.out.println("+--------------------------------------------------+\n");
 
         System.out.println("Seleccione una acción del menú: " +
-                "\n| 1 | Crear una nueva cuenta" +
-                "\n| 2 | Ingresar a sus movimientos" +
-                "\n| 3 | Eliminar una cuenta" +
-                "\n| 4 | Salir - Menú principal");
+                "\n| 1 | Listar las cuentas" +
+                "\n| 2 | Crear una nueva cuenta" +
+                "\n| 3 | Ingresar a sus movimientos" +
+                "\n| 4 | Eliminar una cuenta" +
+                "\n| 5 | Salir - Menú principal");
 
         return Integer.valueOf(Keyboard.getInputInteger());
 
     }
 
-    public String printPersonPerPage(List<AccountDTO> accounts, List<String> paginator, String optionDelete, boolean showHeader) {
+    public String printPersonPerPage(List<AccountDTO> accounts, List<String> paginator, String optionEdithOrDelete, boolean showHeader) {
         if (showHeader) {
             System.out.println("\n+----------------------------------------------------------------+");
             System.out.println("\t  Bank - Rota :: Modulo de Cuentas :: Lista de Cuentas");
             System.out.println("+----------------------------------------------------------------+\n");
         }
-        System.out.println("\t|\tID\t|CUENTAS|");
+        System.out.println("|\tID\t|\tCUENTAS");
         accounts.forEach(account -> {
-            System.out.println(account.getId() + account.getNumber_account());
-            //System.out.println(account.getPerson().getId() + account.getPerson().getName() + account.getPerson().getLastName(),
-              //              account.getType_account());
-
+                    System.out.println("|\t" + account.getId() + "\t|\t" + account.getNumber_account() + "\t|\t" +
+                            account.getPerson() + "\t|\t" + account.getType_account() + "\t|");
                 }
         );
+        if (optionEdithOrDelete != null && !optionEdithOrDelete.isEmpty())
+            paginator.set(paginator.size() - 2, optionEdithOrDelete);
+
+        System.out.println("\n+----------------------------------------------------------------+");
+        paginator.forEach(page -> System.out.print(page + " "));
+        System.out.println("\n+----------------------------------------------------------------+\n");
+
+        Scanner keyboard = Keyboard.getInstance();
+
         return String.valueOf(Keyboard.getInputString());
 
     }
@@ -75,10 +82,10 @@ public class AccountView {
 
         keyboard.nextLine();
 
-       return Boolean.valueOf(Keyboard.getInputInteger());
+        return Boolean.valueOf(Keyboard.getInputInteger());
     }
 
-    public void showDeleteAccount(PersonDTO person) {
+    public void showDeleteAccount(String person) {
         System.out.println("La cuenta se ha eliminado exitosamente");
         Keyboard.pressEnterToContinue();
     }
@@ -91,6 +98,27 @@ public class AccountView {
     public void accountNotExist(int id) {
         System.out.println("No existe una cuenta con el id " + id + " asociado");
         System.out.println("Seleccione un ID valido ó 0 para cancelar");
+    }
+
+    public HashMap<String, String> getNewAccount(List<PersonDTO> person, Collection<Type_accountDTO> typeAccount) {
+        HashMap<String, String> data = new HashMap<>();
+
+        System.out.println("\nIngrese por favor al azar 4 digitos " +
+                Ansi.RED + " \n[NO PODRAN SER NUMEROS CONSECUTIVOS, NI REPETIDOS]: " + Ansi.RESET);
+        data.put("number_account", Keyboard.getInputInteger());
+
+        System.out.println("\nSeleccione su usuario: ");
+        person.forEach(persons ->
+                System.out.println("\t|" + persons.getId() + "\t|\t" + persons.getName() + "\t|\t" + persons.getLastName() +
+                        "\t|\t" + persons.getNumber_doc()));
+        data.put("person_id", Keyboard.getInputInteger());
+
+        System.out.println("\nSeleccione el tipo de cuenta que desea: ");
+        typeAccount.forEach(types ->
+                System.out.println("\t|" + types.getId() + "\t|\t" + types.getType_account()));
+        data.put("types_account_id", Keyboard.getInputInteger());
+
+        return data;
     }
 }
 

@@ -3,17 +3,16 @@ package ar.com.ada.maven.view;
 import ar.com.ada.maven.utils.Ansi;
 import ar.com.ada.maven.utils.Keyboard;
 
-import java.util.InputMismatchException;
-import java.util.Scanner;
-
 public class MainView {
 
     public int mainMenuSelectOption() {
 
-        System.out.println("** BIENVENIDOS A BANK ROTA **\n");
+        System.out.println("--------------------------------------------------");
+        System.out.println("\t** BIENVENIDOS A BANK ROTA **");
+        System.out.println("--------------------------------------------------\n");
         System.out.println("Seleccione una opción: " +
-                "\n| 1 | ¿Desea ingresar un nuevo usuario?" +
-                "\n| 2 | ¿Desea ingresar con su usuario?" +
+                "\n| 1 | Cliente" +
+                "\n| 2 | Cuentas" +
                 "\n| 3 | Salir");
 
         return Integer.valueOf(Keyboard.getInputInteger());

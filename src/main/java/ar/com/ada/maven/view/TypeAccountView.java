@@ -1,6 +1,5 @@
 package ar.com.ada.maven.view;
 
-import ar.com.ada.maven.model.DTO.PersonDTO;
 import ar.com.ada.maven.model.DTO.Type_accountDTO;
 import ar.com.ada.maven.utils.Ansi;
 import ar.com.ada.maven.utils.Keyboard;
@@ -9,7 +8,7 @@ import java.util.List;
 
 public class TypeAccountView {
 
-    public int typeAccountMenuSelectOption(List<Type_accountDTO> typeAccount) {
+    public String typeAccountMenuSelectOption(List<Type_accountDTO> typeAccount) {
         System.out.println("\n+--------------------------------------------------+");
         System.out.println("\t\t  Bank - Rota :: Modulo Tipo de cuenta");
         System.out.println("+--------------------------------------------------+\n");
@@ -17,13 +16,8 @@ public class TypeAccountView {
         System.out.println("Seleccione qué tipo de cuenta desea: ");
         typeAccount.forEach(types ->
                 System.out.println("\t|" + types.getId() + "\t|" + types.getType_account()));
-                //"\n| 1 | Cuenta corriente en pesos ARG" +
-                //"\n| 2 | Cuenta corriente en pesos USD" +
-                //"\n| 3 | Cuenta corriente en pesos EUR" +
-                //"\n| 4 | Cancelar");
 
-        return Integer.valueOf(Keyboard.getInputInteger());
-
+        return String.valueOf(Keyboard.getInputInteger());
     }
 
     public void newAccountCanceled() {
@@ -42,30 +36,13 @@ public class TypeAccountView {
         return String.valueOf(Keyboard.getInputInteger());*/
     }
 
-    public String getNewAccountARG() {
+    public String getNewAccount() {
         System.out.println("Ingrese por favor al azar 4 digitos " +
                 Ansi.RED + " \n[NO PODRAN SER NUMEROS CONSECUTIVOS, NI REPETIDOS]: " + Ansi.RESET);
 
         return String.valueOf(Keyboard.getInputInteger());
     }
 
-    public String getNewAccountUSD() {
-        System.out.println("Ingrese por favor al azar 4 digitos " +
-                Ansi.RED + " \n[NO PODRAN SER NUMEROS CONSECUTIVOS, NI REPETIDOS]: " + Ansi.RESET);
-
-        String integer = Keyboard.getInputInteger();
-
-        return integer;
-    }
-
-    public String getNewAccountEUR() {
-        System.out.println("Ingrese por favor al azar 4 digitos " +
-                Ansi.RED + " \n[NO PODRAN SER NUMEROS CONSECUTIVOS, NI REPETIDOS]: " + Ansi.RESET);
-
-        String integer = Keyboard.getInputInteger();
-
-        return integer;
-    }
 
     public void accountAlreadyExists(String type) {
         System.out.println("Los numeros ingresados ya corresponden a otro cliente");

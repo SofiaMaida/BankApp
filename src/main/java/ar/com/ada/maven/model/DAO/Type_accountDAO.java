@@ -66,14 +66,12 @@ public class Type_accountDAO implements DAO<Type_accountDTO> {
 
     @Override
     public Boolean save(Type_accountDTO type_accountDTO) {
-        String sql = "INSERT INTO type_account (type) VALUES (Cuenta corriente en pesos ARG, Cuenta corriente en pesos USD, Cuenta corriente en pesos EUR)";
+        String sql = "INSERT INTO type_account (type) VALUES (?)";
         int hasInsert = 0;
         try {
             Connection conn = DBConnection.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, "Cuenta corriente en pesos ARG");
-            ps.setString(2, "Cuenta corriente en pesos USD");
-            ps.setString(3, "Cuenta corriente en pesos EUR");
+            ps.setString(1, type_accountDTO.getType_account());
             hasInsert = ps.executeUpdate();
             conn.close();
         } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {

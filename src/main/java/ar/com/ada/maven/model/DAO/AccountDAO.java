@@ -17,9 +17,6 @@ public class AccountDAO implements DAO<AccountDTO> {
     public AccountDAO(boolean b) {
     }
 
-    public AccountDAO() {
-    }
-
     @Override
     public ArrayList<AccountDTO> findAll() {
         String sql = "SELECT * FROM Account";
@@ -31,7 +28,7 @@ public class AccountDAO implements DAO<AccountDTO> {
             while (rs.next()) {
                 PersonDTO person = personDAO.findById(rs.getInt("Person_id"));
                 Type_accountDTO type_account = typeDAO.findById(rs.getInt("type_account_id"));
-                AccountDTO accountDTO = new AccountDTO(rs.getInt("id"), rs.getInt("number_account"), person, type_account);
+                AccountDTO accountDTO = new AccountDTO(rs.getInt("id"), rs.getString("number_account"), person, type_account);
                 account.add(accountDTO);
             }
             if (willCloseConnection)
@@ -54,7 +51,7 @@ public class AccountDAO implements DAO<AccountDTO> {
             if (rs.next()) {
                 PersonDTO person = personDAO.findById(rs.getInt("Person_id"));
                 Type_accountDTO typeDTO = typeDAO.findById(rs.getInt("type_account_id"));
-                account = new AccountDTO(rs.getInt("id"), rs.getInt("number_account"), person, typeDTO);
+                account = new AccountDTO(rs.getInt("id"), rs.getString("number_account"), person, typeDTO);
             }
             if (willCloseConnection) connection.close();
 
@@ -84,7 +81,7 @@ public class AccountDAO implements DAO<AccountDTO> {
 
     @Override
     public Boolean update(AccountDTO accountDTO, Integer id) {
-        String sql = "UPDATE Account SET number_account = ?, person_id = ?";
+        String sql = "UPDATE Account SET number_account = ?, person_id = ?, type_account_id = ?";
         int hasUpdate = 0;
         AccountDTO accountDB = findById(id);
         try {
@@ -147,7 +144,8 @@ public class AccountDAO implements DAO<AccountDTO> {
             ResultSet rs = preparedStatement.executeQuery();
             while (rs.next()) {
                 PersonDTO person = personDAO.findById(rs.getInt("Person_id"));
-                AccountDTO accountDTO = new AccountDTO(rs.getInt("id"), rs.getString("number_account"), person);
+                Type_accountDTO type_accountDTO = typeDAO.findById(rs.getInt("Type_account_id"));
+                AccountDTO accountDTO = new AccountDTO(rs.getInt("id"), rs.getString("number_account"), person, type_accountDTO);
                 account.add(accountDTO);
             }
             connection.close();
@@ -163,7 +161,7 @@ public class AccountDAO implements DAO<AccountDTO> {
         try {
             Connection conn = DBConnection.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, String.valueOf(accountDTO));
+            ps.setString(1, numberAccount);
             ResultSet rs = ps.executeQuery();
             if (rs.next())
                 accountDTO = new AccountDTO(rs.getInt("id"), rs.getString("number_account"));

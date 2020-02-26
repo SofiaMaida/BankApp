@@ -2,34 +2,33 @@ package ar.com.ada.maven.model.DTO;
 
 public class AccountDTO {
 
-    private Integer id, number_account;
+    private Integer id;
+    private String number_account;
     private PersonDTO person;
     private Type_accountDTO type_account;
 
-    public AccountDTO(int id, String number_account){
-    }
 
-    public AccountDTO(Integer id, Integer number_account){
-        this.id = id;
-        this.number_account = number_account;
-    }
-
-    public AccountDTO(Integer id, Integer number_account, PersonDTO person, Type_accountDTO type_account){
+    public AccountDTO(Integer id, String number_account, PersonDTO person, Type_accountDTO type_account){
         this.id = id;
         this.number_account = number_account;
         this.person = person;
         this.type_account = type_account;
     }
 
-    public AccountDTO(int id, String name, PersonDTO personDTO) {
-
+    public AccountDTO(int id, String number_account) {
+        this.id = id;
+        this.number_account = number_account;
     }
 
-    public AccountDTO(String newAccountARG) {
-
+    public AccountDTO(String numberAccount, PersonDTO persons, Type_accountDTO typeAccountDTO) {
+        this.number_account = numberAccount;
+        this.person = persons;
+        this.type_account = typeAccountDTO;
     }
 
-    public AccountDTO(String newAccountARG, PersonDTO personById) {
+    public AccountDTO(String numberAccount, PersonDTO persons) {
+        this.number_account = numberAccount;
+        this.person = persons;
 
     }
 
@@ -50,10 +49,10 @@ public class AccountDTO {
     }
 
     public String getNumber_account() {
-        return String.valueOf(number_account);
+        return number_account;
     }
 
-    public void setNumber_account(Integer number_account) {
+    public void setNumber_account(String number_account) {
         this.number_account = number_account;
     }
 
