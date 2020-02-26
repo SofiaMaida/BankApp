@@ -40,12 +40,9 @@ public class AccountController {
                     createNewAccount();
                     break;
                 case 3:
-                    loginToAccount();
-                    break;
-                case 4:
                     deleteAccount();
                     break;
-                case 5:
+                case 4:
                     shouldGetOut = true;
                     break;
                 default:
@@ -72,7 +69,7 @@ public class AccountController {
             PersonDTO persons = personDAO.findById(personId);
             Type_accountDTO typeAccountDTO = type_accountDAO.findById(typeAccountId);
 
-            AccountDTO newAccount = new AccountDTO(account.get("numberAccount"), persons, typeAccountDTO);
+            AccountDTO newAccount = new AccountDTO(account.get("number_account"), persons, typeAccountDTO);
             AccountDTO byAccount = accountDAO.findByNumberAccount(String.valueOf(personId));
 
             if (byAccount != null) {
@@ -90,52 +87,8 @@ public class AccountController {
             typeAccountView.newAccountCanceled();
         }
 
-
-
-
-
-
-
-        /*Collection<Type_accountDTO> typeAccount = type_accountDAO.findAll();
-        //pide el tipo de cuenta que quiere y lo guarda en la variable newAccountARG
-        String newAccountARG = typeAccountView.typeAccountMenuSelectOption((List<Type_accountDTO>) typeAccount);
-        String numberAccount = "AR25 0064 0482 25 536398";
-
-        if (!newAccountARG.isEmpty()) {
-            //enlista los clientes para seleccionar
-            typeAccountView.choiceAccountId();
-            int personId = PersonController.personListPerPage(Paginator.SELECT, false);
-
-            if (personId != 0) {
-                AccountDTO accountByNumberAccount = accountDAO.findByNumberAccount(newAccountARG);
-                PersonDTO personById = personDAO.findById(personId);
-
-                AccountDTO accountDTO = new AccountDTO(newAccountARG, personById);
-
-                if (accountByNumberAccount != null && accountByNumberAccount.equals(accountDTO)) {
-                    typeAccountView.accountAlreadyExists(accountDTO.getNumber_account());
-                } else {
-                    Boolean isSaved = accountDAO.save(accountDTO);
-                    if (isSaved)
-                        typeAccountView.showNewAccount(numberAccount + accountDTO.getNumber_account());
-                }
-            } else {
-                typeAccountView.newAccountCanceled();
-            }
-        } else {
-            typeAccountView.newAccountCanceled();
-        }*/
     }
 
-    private static void loginToAccount() {
-        List<MovementsDTO> movementsList;
-        //enlistar a clientes
-        typeAccountView.choiceAccountId();
-        int personId = PersonController.personListPerPage(Paginator.SELECT, false);
-        //selecciona e ingresa a movimientos
-        //view.movements
-
-    }
 
     private static int listAccountPerPage(String optionSelectDelete, boolean showHeader) {
         int limit = 3, currentPage = 0, totalAccount, totalPages, personIdSelected = 0;

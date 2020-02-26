@@ -21,9 +21,8 @@ public class AccountView {
         System.out.println("Seleccione una acción del menú: " +
                 "\n| 1 | Listar las cuentas" +
                 "\n| 2 | Crear una nueva cuenta" +
-                "\n| 3 | Ingresar a sus movimientos" +
-                "\n| 4 | Eliminar una cuenta" +
-                "\n| 5 | Salir - Menú principal");
+                "\n| 3 | Eliminar una cuenta" +
+                "\n| 4 | Salir - Menú principal");
 
         return Integer.valueOf(Keyboard.getInputInteger());
 
@@ -76,22 +75,20 @@ public class AccountView {
     public boolean getResponseToDelete(AccountDTO account) {
         System.out.println(Ansi.RED + "¡ADVERTENCIA! SI LA CUENTA POSEE MOVIMIENTOS NO PODRÁ SER ELIMINADA" + Ansi.RESET);
 
-        System.out.println("¿Esta seguro que desea eliminarlo?\n");
-        System.out.println("\n| 1 | Si");
-        System.out.println("\n| 2 | No");
-
-        keyboard.nextLine();
+        System.out.println("¿Esta seguro que desea eliminarlo?");
+        System.out.println("| 1 | Si");
+        System.out.println("| 2 | No");
 
         return Boolean.valueOf(Keyboard.getInputInteger());
     }
 
     public void showDeleteAccount(String person) {
-        System.out.println("La cuenta se ha eliminado exitosamente");
+        System.out.println(Ansi.GREEN + "La cuenta se ha eliminado exitosamente" + Ansi.RESET);
         Keyboard.pressEnterToContinue();
     }
 
     public void deleteAccountCanceled() {
-        System.out.println("Ha cancelado la elimincacion de la cuenta");
+        System.out.println(Ansi.RED + "Ha cancelado la elimincacion de la cuenta" + Ansi.RESET);
         Keyboard.pressEnterToContinue();
     }
 
@@ -115,8 +112,8 @@ public class AccountView {
 
         System.out.println("\nSeleccione el tipo de cuenta que desea: ");
         typeAccount.forEach(types ->
-                System.out.println("\t|" + types.getId() + "\t|\t" + types.getType_account()));
-        data.put("types_account_id", Keyboard.getInputInteger());
+                System.out.println("|\t" + types.getId() + "\t|\t" + types.getType_account()));
+        data.put("type_account_id", Keyboard.getInputInteger());
 
         return data;
     }
