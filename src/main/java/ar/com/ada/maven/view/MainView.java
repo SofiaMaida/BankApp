@@ -10,11 +10,13 @@ public class MainView {
 
     public int mainMenuSelectOption() {
 
-        System.out.println("** BIENVENIDOS A BANK ROTA **\n");
+        System.out.println("------------------------------------");
+        System.out.println(Ansi.PURPLE + "** BIENVENIDOS A BANK ROTA **" + Ansi.RESET);
+        System.out.println("------------------------------------");
         System.out.println("Seleccione una opción: " +
-                "\n| 1 | ¿Desea ingresar un nuevo usuario?" +
-                "\n| 2 | ¿Desea ingresar con su usuario?" +
-                "\n| 3 | ¿Desea realizar un movimiento?" +
+                "\n| 1 | Clientes" +
+                "\n| 2 | Cuentas" +
+                "\n| 3 | Movimientos" +
                 "\n| 4 | Salir");
 
         return Integer.valueOf(Keyboard.getInputInteger());

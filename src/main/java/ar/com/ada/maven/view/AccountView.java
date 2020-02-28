@@ -1,54 +1,137 @@
 package ar.com.ada.maven.view;
 
+import ar.com.ada.maven.model.DTO.AccountDTO;
+import ar.com.ada.maven.model.DTO.PersonDTO;
+import ar.com.ada.maven.model.DTO.Type_accountDTO;
+import ar.com.ada.maven.utils.Ansi;
 import ar.com.ada.maven.utils.Keyboard;
+import ar.com.ada.maven.utils.Paginator;
 
-import java.util.InputMismatchException;
-import java.util.Scanner;
+import java.util.*;
 
 public class AccountView {
 
     private Scanner keyboard = Keyboard.getInstance();
 
-    public String getNewTypeAccount() {
-        System.out.println("Seleccione qué tipo de cuenta aspira: " +
-                "| 1 | Cuenta corriente en pesos ARG" +
-                "| 2 | Cuenta corriente en pesos USD" +
-                "| 3 | Cuenta corriente en pesos EUR" +
-                "| 4 | Cancelar");
+    public int accountMenuSelectOption() {
+        System.out.println("\n+--------------------------------------------------+");
+        System.out.println("\t\t  Bank - Rota :: Modulo de Cuenta");
+        System.out.println("+--------------------------------------------------+\n");
 
-        Scanner scanner = Keyboard.getInstance();
-        scanner.nextLine();
+        System.out.println("Seleccione una acción del menú: " +
+                "\n| 1 | Listar las cuentas" +
+                "\n| 2 | Crear una nueva cuenta" +
+                "\n| 3 | Eliminar una cuenta" +
+                "\n| 4 | Salir - Menú principal");
+
+        return Integer.valueOf(Keyboard.getInputInteger());
+
+    }
+
+    public String printPersonPerPage(List<AccountDTO> accounts, List<String> paginator, String optionEdithOrDelete, boolean showHeader) {
+        if (showHeader) {
+            System.out.println("\n+----------------------------------------------------------------+");
+            System.out.println(Ansi.PURPLE + "\t  Bank - Rota :: Modulo de Cuentas :: Lista de Cuentas" + Ansi.RESET);
+            System.out.println("+----------------------------------------------------------------+\n");
+        }
+        System.out.println("|\tID\t|\tCUENTAS");
+        String numberAccountAR = "AR25 0064 0482 25 536398";
+        accounts.forEach(account -> {
+                    System.out.println("|\t" + account.getId() + "\t|\t" + numberAccountAR + account.getNumber_account() + "\t|\t" +
+                            account.getPerson() + "\t|\t" + account.getType_account() + "\t|");
+                }
+        );
+        if (optionEdithOrDelete != null && !optionEdithOrDelete.isEmpty())
+            paginator.set(paginator.size() - 2, optionEdithOrDelete);
+
+        System.out.println("\n+----------------------------------------------------------------+");
+        paginator.forEach(page -> System.out.print(page + " "));
+        System.out.println("\n+----------------------------------------------------------------+\n");
+
+        Scanner keyboard = Keyboard.getInstance();
+
+        return String.valueOf(Keyboard.getInputString());
+
+    }
+
+    public Integer personIdSelected(String actionOption) {
+        switch (actionOption) {
+            case Paginator.DELETE:
+                actionOption = "Eliminar";
+                break;
+            case Paginator.SELECT:
+                actionOption = "Elegir";
+                break;
+        }
+        System.out.println("Ingrese el numero de ID del cliente para " + actionOption + " ó 0 para cancelar: \n");
+
+        return Integer.valueOf(Keyboard.getInputInteger());
+    }
+
+    public static void selectAccountIdToDeleteInfo(String actions) {
+        System.out.println("De la siguiente lista de cuentas, seleccione el id para eliminar");
+        Keyboard.pressEnterToContinue();
+    }
+
+    public boolean getResponseToDelete(AccountDTO account) {
+        System.out.println(Ansi.RED + "¡ADVERTENCIA! SI LA CUENTA POSEE MOVIMIENTOS NO PODRÁ SER ELIMINADA" + Ansi.RESET);
+
+        System.out.println("¿Esta seguro que desea eliminarlo?");
+        System.out.println("| 1 | Si");
+        System.out.println("| 2 | No");
+
+        keyboard.nextLine();
 
         while (true) {
             try {
-
-                String name = scanner.nextLine().trim();
-                while (!name.matches("^[A-Za-záéíóúüÁÉÍÓÚÜ\\s]+$") && !name.isEmpty()) {
-                    System.out.println("Error, debe ingresar un dato válido");
-                    name = scanner.nextLine();
-
+                System.out.print("? ");
+                String name = keyboard.nextLine().trim();
+                while (!name.matches("^[1-2]+$") && !name.isEmpty()) {
+                    System.out.println("Error, debe ingresar una opcion valida");
+                    name = keyboard.nextLine();
                 }
-                return name;
+                return "1".equals(name);
             } catch (InputMismatchException e) {
-                System.out.println("Error, debe ingresar un dato válido");
+                System.out.println("Error, debe ingresar una opcion valida");
+                keyboard.next();
             }
         }
     }
 
-    public void accountAlreadyExists(String account) {
-        System.out.println("Los datos ingresados ya corresponden a otro cliente");
+    public void showDeleteAccount(String person) {
+        System.out.println(Ansi.GREEN + "La cuenta se ha eliminado exitosamente\n" + Ansi.RESET);
         Keyboard.pressEnterToContinue();
     }
 
-    public void showNewAccount(String account) {
-        System.out.println("Se ha creado exitosamente su cuenta");
+    public void deleteAccountCanceled() {
+        System.out.println(Ansi.RED + "Ha cancelado la elimincacion de la cuenta\n" + Ansi.RESET);
         Keyboard.pressEnterToContinue();
     }
 
-    public void newAccountCanceled() {
-        System.out.println("Se ha cancelado el proceso de guardado");
-        Keyboard.pressEnterToContinue();
+    public void accountNotExist(int id) {
+        System.out.println("No existe una cuenta con el id " + id + " asociado");
+        System.out.println("Seleccione un ID valido ó 0 para cancelar");
     }
 
+    public HashMap<String, String> getNewAccount(List<PersonDTO> person, Collection<Type_accountDTO> typeAccount) {
+        HashMap<String, String> data = new HashMap<>();
 
+        System.out.println("\nIngrese por favor al azar 4 digitos " +
+                Ansi.RED + " \n[NO PODRAN SER NUMEROS CONSECUTIVOS, NI REPETITIVOS]: " + Ansi.RESET);
+        data.put("number_account", Keyboard.getInputInteger());
+
+        System.out.println("\nSeleccione su usuario: ");
+        person.forEach(persons ->
+                System.out.println("\t|" + persons.getId() + "\t|\t" + persons.getName() + "\t|\t" + persons.getLastName() +
+                        "\t|\t" + persons.getNumber_doc()));
+        data.put("person_id", Keyboard.getInputInteger());
+
+        System.out.println("\nSeleccione el tipo de cuenta que desea: ");
+        typeAccount.forEach(types ->
+                System.out.println("|\t" + types.getId() + "\t|\t" + types.getType_account()));
+        data.put("type_account_id", Keyboard.getInputInteger());
+
+        return data;
+    }
 }
+

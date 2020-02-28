@@ -1,12 +1,10 @@
 package ar.com.ada.maven.model.DAO;
 
 import ar.com.ada.maven.model.DBConnection;
-import ar.com.ada.maven.model.DTO.AccountDTO;
 import ar.com.ada.maven.model.DTO.Type_accountDTO;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 public class Type_accountDAO implements DAO<Type_accountDTO> {
@@ -30,7 +28,7 @@ public class Type_accountDAO implements DAO<Type_accountDTO> {
             while(rs.next()){
 
                 Type_accountDTO type = new Type_accountDTO(rs.getInt("id"),
-                        rs.getString("type"));
+                        rs.getString("type_account"));
                 types.add(type);
             }
 
@@ -52,7 +50,7 @@ public class Type_accountDAO implements DAO<Type_accountDTO> {
             ResultSet rs = ps.executeQuery();
             if (rs.next()){
 
-                type = new Type_accountDTO(rs.getInt("id"), rs.getString("type"));}
+                type = new Type_accountDTO(rs.getInt("id"), rs.getString("type_account"));}
             if (willCloseConnection)
                 conn.close();
         } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
@@ -70,7 +68,7 @@ public class Type_accountDAO implements DAO<Type_accountDTO> {
         try {
             Connection conn = DBConnection.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, type_accountDTO.getType());
+            ps.setString(1, type_accountDTO.getType_account());
             hasInsert = ps.executeUpdate();
             conn.close();
         } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
@@ -81,14 +79,14 @@ public class Type_accountDAO implements DAO<Type_accountDTO> {
 
     @Override
     public Boolean update(Type_accountDTO type_accountDTO, Integer id) {
-        String sql = "UPDATE type_account SET type = ? WHERE id = ?";
+        String sql = "UPDATE type_account SET type_account = ? WHERE id = ?";
         int hasUpdate = 0;
         Type_accountDTO typeDTO = findById(id);
         try {
             Connection conn = DBConnection.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1,type_accountDTO.getType());
-            if (!type_accountDTO.getType().equals(typeDTO.getType()));
+            ps.setString(1,type_accountDTO.getType_account());
+            if (!type_accountDTO.getType_account().equals(typeDTO.getType_account()));
             hasUpdate = ps.executeUpdate();
             conn.close();
         } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
@@ -114,7 +112,6 @@ public class Type_accountDAO implements DAO<Type_accountDTO> {
 
         return hasErased == 1;
     }
-
 
 }
 

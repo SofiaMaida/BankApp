@@ -14,9 +14,8 @@ public class AccountDAO implements DAO<AccountDTO> {
     public PersonDAO personDAO = new PersonDAO(false);
     public Type_accountDAO typeDAO = new Type_accountDAO(false);
 
-    public AccountDAO(boolean b) {}
-
-    public AccountDAO(){}
+    public AccountDAO(boolean b) {
+    }
 
     @Override
     public ArrayList<AccountDTO> findAll() {
@@ -29,7 +28,7 @@ public class AccountDAO implements DAO<AccountDTO> {
             while (rs.next()) {
                 PersonDTO person = personDAO.findById(rs.getInt("Person_id"));
                 Type_accountDTO type_account = typeDAO.findById(rs.getInt("type_account_id"));
-                AccountDTO accountDTO = new AccountDTO(rs.getInt("id"), rs.getInt("number_account"), person, type_account);
+                AccountDTO accountDTO = new AccountDTO(rs.getInt("id"), rs.getString("number_account"), person, type_account);
                 account.add(accountDTO);
             }
             if (willCloseConnection)
@@ -52,7 +51,7 @@ public class AccountDAO implements DAO<AccountDTO> {
             if (rs.next()) {
                 PersonDTO person = personDAO.findById(rs.getInt("Person_id"));
                 Type_accountDTO typeDTO = typeDAO.findById(rs.getInt("type_account_id"));
-                account = new AccountDTO(rs.getInt("id"), rs.getInt("number_account"), person, typeDTO);
+                account = new AccountDTO(rs.getInt("id"), rs.getString("number_account"), person, typeDTO);
             }
             if (willCloseConnection) connection.close();
 
@@ -64,14 +63,14 @@ public class AccountDAO implements DAO<AccountDTO> {
 
     @Override
     public Boolean save(AccountDTO accountDTO) {
-        String sql = "INSERT INTO Account (number_account, person_id) values (?, ?)";
+        String sql = "INSERT INTO Account (number_account, person_id, type_account_id) values (?, ?, ?)";
         int affectedRows = 0;
         try {
             Connection connection = DBConnection.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, accountDTO.getNumber_account());
+            preparedStatement.setString(1, accountDTO.getNumber_account());
             preparedStatement.setInt(2, accountDTO.getPerson().getId());
-            preparedStatement.setInt(3,accountDTO.getType_account().getId());
+            preparedStatement.setInt(3, accountDTO.getType_account().getId());
             affectedRows = preparedStatement.executeUpdate();
             connection.close();
         } catch (Exception e) {
@@ -82,18 +81,19 @@ public class AccountDAO implements DAO<AccountDTO> {
 
     @Override
     public Boolean update(AccountDTO accountDTO, Integer id) {
-        String sql = "UPDATE Account SET number_account = ?, person_id = ?";
+        String sql = "UPDATE Account SET number_account = ?, person_id = ?, type_account_id = ?";
         int hasUpdate = 0;
         AccountDTO accountDB = findById(id);
         try {
             Connection connection = DBConnection.getConnection();
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
-            preparedStatement.setInt(1, accountDTO.getNumber_account());
+            preparedStatement.setInt(1, Integer.parseInt(accountDTO.getNumber_account()));
             preparedStatement.setInt(2, accountDTO.getPerson().getId());
-            preparedStatement.setInt(3,accountDTO.getType_account().getId());
+            preparedStatement.setInt(3, accountDTO.getType_account().getId());
 
             if (!(accountDTO.getNumber_account().equals(accountDB.getNumber_account()) &&
-                    accountDTO.getPerson().equals(accountDB.getPerson()) && accountDTO.getType_account().equals(accountDB.getType_account())));
+                    accountDTO.getPerson().equals(accountDB.getPerson()) &&
+                    accountDTO.getType_account().equals(accountDB.getType_account())));
             hasUpdate = preparedStatement.executeUpdate();
             if (willCloseConnection) connection.close();
         } catch (Exception e) {
@@ -116,4 +116,62 @@ public class AccountDAO implements DAO<AccountDTO> {
         }
         return hasDelete == 1;
     }
+
+    public int getTotalPersons() {
+        String sql = "SELECT COUNT(*) AS total FROM Account";
+        int total = 0;
+        try {
+            Connection connection = DBConnection.getConnection();
+            Statement statement = connection.createStatement();
+            ResultSet rs = statement.executeQuery(sql);
+            if (rs.next()) total = rs.getInt("total");
+            connection.close();
+        } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+            System.out.println("CONNECTION ERROR GET TOTAL ACCOUNT: " + e.getMessage());
+        }
+
+        return total;
+    }
+
+    public ArrayList<AccountDTO> findAll(int limit, int offset) {
+        String sql = "SELECT * FROM account LIMIT ? OFFSET ?";
+        ArrayList<AccountDTO> account = new ArrayList<>();
+        try {
+            Connection connection = DBConnection.getConnection();
+            PreparedStatement preparedStatement = connection.prepareStatement(sql);
+            preparedStatement.setInt(1, limit);
+            preparedStatement.setInt(2, offset);
+            ResultSet rs = preparedStatement.executeQuery();
+            while (rs.next()) {
+                PersonDTO person = personDAO.findById(rs.getInt("Person_id"));
+                Type_accountDTO type_accountDTO = typeDAO.findById(rs.getInt("Type_account_id"));
+                AccountDTO accountDTO = new AccountDTO(rs.getInt("id"), rs.getString("number_account"), person, type_accountDTO);
+                account.add(accountDTO);
+            }
+            connection.close();
+        } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+            System.out.println("CONNECTION ERROR FINDALL ACCOUNT: " + e.getMessage());
+        }
+        return account;
+    }
+
+    public AccountDTO findByNumberAccount(String numberAccount) {
+        String sql = "SELECT * FROM account WHERE number_account = ?";
+        AccountDTO accountDTO = null;
+        try {
+            Connection conn = DBConnection.getConnection();
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1, numberAccount);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next())
+                //PersonDTO person = personDAO.findById(rs.getInt("person_id"));
+                accountDTO = new AccountDTO(rs.getInt("id"), rs.getString("number_account"));
+            if (willCloseConnection)
+                conn.close();
+        } catch (SQLException | ClassNotFoundException | IllegalAccessException | InstantiationException e) {
+            System.out.println("CONNECTION ERROR FINDBY NUMBER ACCOUNT: " + e.getMessage());
+        }
+        return accountDTO;
+    }
+
 }

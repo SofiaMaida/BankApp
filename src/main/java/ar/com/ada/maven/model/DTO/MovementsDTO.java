@@ -8,33 +8,26 @@ public class MovementsDTO {
     private int id;
     private Date move_date;
     private String description;
-    private BalanceDTO balance;
     private AccountDTO account;
     private Type_movementsDTO type_movements;
     private Double amount;
 
-    public MovementsDTO() {
-    }
-
-    public MovementsDTO(int id, Date move_date, Double amount, String description, BalanceDTO balance_id, AccountDTO account_id,
-                        Type_movementsDTO type_movements_id) {
+    public MovementsDTO(int id, Date move_date, String description, AccountDTO account, Type_movementsDTO type_movements, Double amount) {
         this.id = id;
         this.move_date = move_date;
         this.description = description;
-        this.balance = balance_id;
-        this.account = account_id;
-        this.type_movements = type_movements_id;
+        this.account = account;
+        this.type_movements = type_movements;
         this.amount = amount;
     }
 
-    public MovementsDTO(Type_movementsDTO type_movements_id, Double amount, Date move_date, String description) {
-
-        this.move_date = move_date;
+    public MovementsDTO(Date now, String description, AccountDTO accountDTO, Type_movementsDTO type, Double amount) {
+        this.move_date = now;
         this.description = description;
-        this.type_movements = type_movements_id;
+        this.account = accountDTO;
+        this.type_movements = type;
         this.amount = amount;
     }
-
 
     public int getId() {
         return id;
@@ -44,8 +37,8 @@ public class MovementsDTO {
         this.id = id;
     }
 
-    public java.sql.Date getMove_date() {
-        return (java.sql.Date) move_date;
+    public Date getMove_date() {
+        return move_date;
     }
 
     public void setMove_date(Date move_date) {
@@ -58,14 +51,6 @@ public class MovementsDTO {
 
     public void setDescription(String description) {
         this.description = description;
-    }
-
-    public BalanceDTO getBalance() {
-        return balance;
-    }
-
-    public void setBalance(BalanceDTO balance) {
-        this.balance = balance;
     }
 
     public AccountDTO getAccount() {
@@ -94,13 +79,13 @@ public class MovementsDTO {
 
     @Override
     public String toString() {
-        return "Movements{" +
+        return "MovementsDTO{" +
                 "id=" + id +
                 ", move_date=" + move_date +
                 ", description='" + description + '\'' +
-                ", balance_id=" + balance +
-                ", account_id=" + account +
-                ", type_movements_id=" + type_movements +
+                ", account=" + account +
+                ", type_movements=" + type_movements +
+                ", amount=" + amount +
                 '}';
     }
 
@@ -108,17 +93,17 @@ public class MovementsDTO {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        MovementsDTO movements = (MovementsDTO) o;
-        return id == movements.id &&
-                Objects.equals(move_date, movements.move_date) &&
-                Objects.equals(description, movements.description) &&
-                Objects.equals(balance, movements.balance) &&
-                Objects.equals(account, movements.account) &&
-                Objects.equals(type_movements, movements.type_movements);
+        MovementsDTO that = (MovementsDTO) o;
+        return id == that.id &&
+                Objects.equals(move_date, that.move_date) &&
+                Objects.equals(description, that.description) &&
+                Objects.equals(account, that.account) &&
+                Objects.equals(type_movements, that.type_movements) &&
+                Objects.equals(amount, that.amount);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, move_date, description, balance, account, type_movements);
+        return Objects.hash(id, move_date, description, account, type_movements, amount);
     }
 }

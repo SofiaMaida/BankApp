@@ -48,17 +48,18 @@ public class PersonController {
     }
 
     public static void createNewClient() {
-        List <DocumentationDTO> typesDoc = docDAO.findAll();
+        List<DocumentationDTO> typesDoc = docDAO.findAll();
         HashMap<String, String> client = view.getNewClient(typesDoc);
         if (!client.isEmpty()) {
 
-            int number_doc = Integer.parseInt(client.get("number_doc"));
+            int numberDoc = Integer.parseInt(client.get("number_doc"));
             int typeDocID = Integer.parseInt(client.get("documentation_type"));
             // como mostrar los tipos de documento
             DocumentationDTO type = docDAO.findById(typeDocID);
 
-            PersonDTO newPerson = new PersonDTO(client.get("name"), client.get("lastName"), number_doc, type);
-            PersonDTO byNumberDoc = personDAO.findByDni(number_doc);
+            PersonDTO newPerson = new PersonDTO(client.get("name"), client.get("lastName"), numberDoc, type);
+
+            PersonDTO byNumberDoc = personDAO.findByDni(numberDoc);
             if (byNumberDoc != null) {
                 view.clientAlreadyExists(newPerson.getName(), newPerson.getLastName(), newPerson.getNumber_doc());
             } else {
@@ -94,7 +95,7 @@ public class PersonController {
 
     public static int personListPerPage(String optionSelectedEditOrDelete, boolean showHeader) {
         int limit = 3, currentPage = 0, totalPages, totalPersons, personIdSelected = 0;
-        List<PersonDTO> person = null;
+        List<PersonDTO> person;
         Boolean shouldGetOut = false;
         List<String> paginator;
 
@@ -125,9 +126,8 @@ public class PersonController {
                     break;
                 case "e":
                 case "E":
-                    String optionSelectEdithOrDelete = null;
-                    if (optionSelectEdithOrDelete != null) {
-                        personIdSelected = view.personIdSelected(optionSelectEdithOrDelete);
+                    if (optionSelectedEditOrDelete != null) {
+                        personIdSelected = view.personIdSelected(optionSelectedEditOrDelete);
                         shouldGetOut = true;
                     }
                     break;
@@ -146,16 +146,85 @@ public class PersonController {
     }
 
     private static void editSelectedPerson(int id) {
-        PersonDTO person = personDAO.findById(id);
-        if (person != null) {
-            String nameToUpdate = view.getDataUpdate(person);
+        int edit = view.selectEditPerson();
+        switch (edit) {
+            case 1:
+                editName(id);
+                break;
+            case 2:
+                editLastName(id);
+                break;
+            case 3:
+                editNumberDoc(id);
+                break;
+            default:
+                System.out.println(Ansi.RED + "Seleccione una opcion valida" + Ansi.RESET);
+        }
+    }
+
+    private static void editName(int id) {
+        PersonDTO personById = personDAO.findById(id);
+        if (personById != null) {
+            view.getPersonToUpdate(personById);
+            String nameToUpdate = view.nameToEdit(personById);
 
             if (!nameToUpdate.isEmpty()) {
-                personDAO.findByDni(Integer.parseInt(nameToUpdate));
-                person.setNumber_doc(Integer.valueOf(nameToUpdate));
-                Boolean isSaved = personDAO.update(person, id);
+                personDAO.findByName(nameToUpdate);
+                personById.setName(nameToUpdate);
+
+                Boolean isSaved = personDAO.update(personById, id);
                 if (isSaved)
-                    view.showUpdateData(person.getName(), person.getLastName(), person.getNumber_doc());
+                    view.showUpdateData(personById.getName(), personById.getLastName(), personById.getNumber_doc());
+            } else
+                view.updatePersonCanceled();
+        } else {
+            view.personNotExist(id);
+            int personIdSelected = view.personIdSelected("Editar");
+            if (personIdSelected != 0) {
+                editSelectedPerson(personIdSelected);
+            } else
+                view.updatePersonCanceled();
+        }
+    }
+
+    private static void editLastName(int id) {
+        PersonDTO personById = personDAO.findById(id);
+        if (personById != null) {
+            view.getPersonToUpdate(personById);
+            String lastNameToUpdate = view.lastNameToEdit(personById);
+
+            if (!lastNameToUpdate.isEmpty()) {
+                personDAO.findByName(lastNameToUpdate);
+                personById.setLastName(lastNameToUpdate);
+
+                Boolean isSaved = personDAO.update(personById, id);
+                if (isSaved)
+                    view.showUpdateData(personById.getName(), personById.getLastName(), personById.getNumber_doc());
+            } else
+                view.updatePersonCanceled();
+        } else {
+            view.personNotExist(id);
+            int personIdSelected = view.personIdSelected("Editar");
+            if (personIdSelected != 0) {
+                editSelectedPerson(personIdSelected);
+            } else
+                view.updatePersonCanceled();
+        }
+    }
+
+    private static void editNumberDoc(int id) {
+        PersonDTO personById = personDAO.findById(id);
+        if (personById != null) {
+            view.getPersonToUpdate(personById);
+            Integer numberDocToUpdate = view.numberDocToEdit(personById);
+
+            if (numberDocToUpdate != null) {
+                personDAO.findById(numberDocToUpdate);
+                personById.setNumber_doc((numberDocToUpdate));
+
+                Boolean isSaved = personDAO.update(personById, id);
+                if (isSaved)
+                    view.showUpdateData(personById.getName(), personById.getLastName(), personById.getNumber_doc());
             } else
                 view.updatePersonCanceled();
         } else {
@@ -173,20 +242,14 @@ public class PersonController {
         if (person != null) {
             Boolean nameDelete = view.getNameDelete(person);
             if (nameDelete) {
-                Boolean isDelete = personDAO.delete(id);
+                Boolean isDelete = personDAO.delete(person.getId());
                 if (isDelete)
-                    view.showDeletePerson(person.getName(), person.getLastName(), person.getNumber_doc());
-            } else
+                    view.showDeletePerson(person.getName(), person.getLastName(), person.getNumber_doc(), person.getDocument_type());
+            } else {
                 view.deletePersonCanceled();
-        } else {
-            view.personNotExist(id);
-            int personIdSelected = view.personIdSelected("Eliminar");
-            if (personIdSelected != 0) {
-                deleteSelectedPerson(personIdSelected);
-            } else
-                view.deletePersonCanceled();
+            }
         }
-
     }
-
 }
+
+

@@ -6,7 +6,7 @@ public class DocumentationDTO {
     private String documentation_type;
 
 
-    public DocumentationDTO(){
+    public DocumentationDTO(boolean b){
 
     }
 

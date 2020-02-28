@@ -17,7 +17,7 @@ public class MainController {
                     PersonController.init();
                     break;
                 case 2:
-                    personList();
+                    AccountController.init();
                     break;
                 case 3:
                     MovementController.init();

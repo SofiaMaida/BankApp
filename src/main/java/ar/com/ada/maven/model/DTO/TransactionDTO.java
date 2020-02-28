@@ -16,6 +16,10 @@ public class TransactionDTO {
         this.movements = movements;
     }
 
+    public TransactionDTO() {
+
+    }
+
     public int getId() {
         return id;
     }
