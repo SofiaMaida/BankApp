@@ -19,7 +19,7 @@ public class MovementController {
     private static MovementView view = new MovementView();
     private static MovementsDAO movDAO = new MovementsDAO();
     private static Type_movementsDAO typeMovDAO = new Type_movementsDAO(true);
-    private static Type_accountDAO typeAccDAO = new Type_accountDAO(true);
+    private static AccountDAO accountDAO = new AccountDAO(false);
 
     public static void init() {
         Boolean des = false;
@@ -44,17 +44,21 @@ public class MovementController {
 
     public static void createNewMovement() {
         HashMap<String, String> movement = view.getNewMovements();
-        if (!movement.isEmpty()){
-            int typeMovID = Integer.parseInt(movement.get("type_movement"));
+        if (!movement.isEmpty()) {
+            int typeMovID = Integer.parseInt(movement.get("type_movements"));
             Type_movementsDTO type = typeMovDAO.findById(typeMovID);
             Date now = Date.from(Instant.now());
+
             Double amount = Double.parseDouble(movement.get("amount"));
+            String account = movement.get("account_id");
+
+            AccountDTO accountDTO= accountDAO.findById(Integer.valueOf(account));
 
 
-            MovementsDTO newMovement = new MovementsDTO(type, amount, now, movement.get("description"));
+            MovementsDTO newMovement = new MovementsDTO(now, movement.get("description"), accountDTO, type, amount);
             Boolean isSaved = movDAO.save(newMovement);
             if (isSaved)
-            view.showNewMovements(newMovement);
+                view.showNewMovements(newMovement);
             else view.updateMovementCanceled();
         }
         view.updateMovementCanceled();
@@ -90,7 +94,7 @@ public class MovementController {
 
             String choice = view.printMovementsPerPage(movements, paginator, showHeader);
 
-            switch (choice){
+            switch (choice) {
                 case "i":
                 case "I":
                     currentPage = 0;
@@ -120,4 +124,28 @@ public class MovementController {
         }
         return movementID;
     }
+
+   /* private static Boolean overdraft(Type_accountDTO typeAcc, Double amount) {
+        int limit = 0;
+        MovementView movementView = new MovementView();
+        switch (typeAccDAO.findById(0)) {
+            case 1:
+                limit = 1000;
+                break;
+            case 2:
+                limit = 150;
+                break;
+            case 3:
+                limit = 300;
+                break;
+        }
+
+        if (amount > limit)
+            return false;
+        else
+            return true;
+        System.out.println("Posee un descubierto fuera de lo permitido");
+    }*/
+
 }
+

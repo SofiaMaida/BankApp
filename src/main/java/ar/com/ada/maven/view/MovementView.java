@@ -1,14 +1,15 @@
 package ar.com.ada.maven.view;
 
-import ar.com.ada.maven.model.DTO.MovementsDTO;
-import ar.com.ada.maven.model.DTO.TransactionDTO;
-import ar.com.ada.maven.model.DTO.Type_movementsDTO;
+import ar.com.ada.maven.model.DAO.AccountDAO;
+import ar.com.ada.maven.model.DTO.*;
 import ar.com.ada.maven.utils.Ansi;
 import ar.com.ada.maven.utils.Keyboard;
-
+import java.util.List;
 import java.util.*;
 
 public class MovementView {
+
+    private static AccountDAO accountDAO = new AccountDAO(false);
 
         public int movementsMenu(){
         System.out.println(" - BANK ROTA - Modulo Movimientos: \n");
@@ -49,15 +50,24 @@ public class MovementView {
     public HashMap<String, String> getNewMovements(){
         HashMap<String,String> data = new HashMap<>();
         Scanner scanner = Keyboard.getInstance();
+        List<AccountDTO> account = accountDAO.findAll();
 
         System.out.println(" | Bienvenidos al creador de MOVIMIENTOS en tu actual cuenta |");
+
+        System.out.println("Seleccione su usuario: ");
+        String numberAccountAR = "AR25 0064 0482 25 536398";
+        account.forEach(accounts ->
+                System.out.println("\t|" + accounts.getId() + "\t|\t" + accounts.getPerson() + "\t|\t" +
+                        "\t|\t" + numberAccountAR + accounts.getNumber_account() + "\t|\t" + accounts.getType_account()));
+        data.put("account_id", Keyboard.getInputInteger());
+
         System.out.println(" Para realizar un movimiento seleccione una de las siguientes opciones:\n");
-        System.out.println(" (1) Débito - \n" +
-                "(2) Crédito - \n");
-        data.put("type_AccountDTO", Keyboard.getInputInteger());
+        System.out.println("| 1 | Débito - \n" +
+                            "| 2 | Crédito - \n");
+        data.put("type_movements", Keyboard.getInputInteger());
 
         System.out.println("Ingrese el monto por realizar:\n ");
-        data.put("Amount", Keyboard.getInputDouble());
+        data.put("amount", Keyboard.getInputDouble());
 
         System.out.println("Ingresar la fecha:\n");
         data.put("move_date", scanner.nextLine());
@@ -66,7 +76,7 @@ public class MovementView {
         data.put("description", Keyboard.getInputString());
 
         System.out.println(Ansi.RED);
-        System.out.println("ADVERTENCIA || Los movimientos no se pueden modicifar o eliminar ||");
+        System.out.println("ADVERTENCIA || Los movimientos no se pueden modificar o eliminar ||");
         System.out.println(Ansi.RESET);
         return data;
     }
@@ -117,6 +127,13 @@ public class MovementView {
         Keyboard.pressEnterToContinue();
     }
 
+    public void codeOverdraft() {
+        System.out.println("Seleccione en qué moneda desea realizar el movimiento");
+
+
+
+
+    }
 
 }
 

@@ -1,12 +1,10 @@
 package ar.com.ada.maven.model.DAO;
 
-import java.sql.SQLException;
 import java.util.Collection;
 
 public interface DAO <T> {
 
-    Collection<T> findAll()
-            throws ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException;
+    Collection<T> findAll();
 
     T findById(Integer id);
 
