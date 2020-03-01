@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="d671b47c-62f7-45ec-aa0d-b82e580cc4dd" name="Default Changelist" comment="Person view">
+      <change afterPath="$PROJECT_DIR$/src/main/java/ar/com/ada/maven/view/TypeAccountView.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/target/classes/ar/com/ada/maven/view/TypeAccountView.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ar/com/ada/maven/controller/AccountController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ar/com/ada/maven/controller/AccountController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ar/com/ada/maven/controller/MainController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ar/com/ada/maven/controller/MainController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ar/com/ada/maven/controller/MovementController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ar/com/ada/maven/controller/MovementController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ar/com/ada/maven/controller/PersonController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ar/com/ada/maven/controller/PersonController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ar/com/ada/maven/model/DAO/AccountDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ar/com/ada/maven/model/DAO/AccountDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ar/com/ada/maven/model/DAO/BalanceDAO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ar/com/ada/maven/model/DAO/MovementsDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ar/com/ada/maven/model/DAO/MovementsDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ar/com/ada/maven/model/DAO/PersonDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ar/com/ada/maven/model/DAO/PersonDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ar/com/ada/maven/model/DAO/Type_accountDAO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ar/com/ada/maven/model/DAO/Type_accountDAO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ar/com/ada/maven/model/DTO/AccountDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ar/com/ada/maven/model/DTO/AccountDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ar/com/ada/maven/model/DTO/BalanceDTO.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ar/com/ada/maven/model/DTO/DocumentationDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ar/com/ada/maven/model/DTO/DocumentationDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ar/com/ada/maven/model/DTO/MovementsDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ar/com/ada/maven/model/DTO/MovementsDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ar/com/ada/maven/model/DTO/Type_accountDTO.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ar/com/ada/maven/model/DTO/Type_accountDTO.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ar/com/ada/maven/utils/Keyboard.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ar/com/ada/maven/utils/Keyboard.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ar/com/ada/maven/view/AccountView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ar/com/ada/maven/view/AccountView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ar/com/ada/maven/view/MainView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ar/com/ada/maven/view/MainView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ar/com/ada/maven/view/MovementView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ar/com/ada/maven/view/MovementView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ar/com/ada/maven/view/PersonView.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ar/com/ada/maven/view/PersonView.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/ar/com/ada/maven/controller/AccountController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/com/ada/maven/controller/AccountController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/ar/com/ada/maven/controller/MainController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/com/ada/maven/controller/MainController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/ar/com/ada/maven/controller/MovementController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/com/ada/maven/controller/MovementController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/ar/com/ada/maven/controller/PersonController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/com/ada/maven/controller/PersonController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/ar/com/ada/maven/model/DAO/AccountDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/com/ada/maven/model/DAO/AccountDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/ar/com/ada/maven/model/DAO/BalanceDAO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/ar/com/ada/maven/model/DAO/MovementsDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/com/ada/maven/model/DAO/MovementsDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/ar/com/ada/maven/model/DAO/PersonDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/com/ada/maven/model/DAO/PersonDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/ar/com/ada/maven/model/DAO/Type_accountDAO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/com/ada/maven/model/DAO/Type_accountDAO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/ar/com/ada/maven/model/DTO/AccountDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/com/ada/maven/model/DTO/AccountDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/ar/com/ada/maven/model/DTO/BalanceDTO.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/ar/com/ada/maven/model/DTO/DocumentationDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/com/ada/maven/model/DTO/DocumentationDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/ar/com/ada/maven/model/DTO/MovementsDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/com/ada/maven/model/DTO/MovementsDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/ar/com/ada/maven/model/DTO/Type_accountDTO.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/com/ada/maven/model/DTO/Type_accountDTO.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/ar/com/ada/maven/utils/Keyboard.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/com/ada/maven/utils/Keyboard.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/ar/com/ada/maven/view/AccountView.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/com/ada/maven/view/AccountView.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/ar/com/ada/maven/view/MainView.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/com/ada/maven/view/MainView.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/ar/com/ada/maven/view/MovementView.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/com/ada/maven/view/MovementView.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/ar/com/ada/maven/view/PersonView.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/ar/com/ada/maven/view/PersonView.class" afterDir="false" />
+    </list>
+    <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MavenImportPreferences">
+    <option name="importingSettings">
+      <MavenImportingSettings>
+        <option name="jdkForImporter" value="1.8" />
+      </MavenImportingSettings>
+    </option>
+  </component>
+  <component name="ProjectId" id="1WzroMKTtUQcDfy0orTAjvzx2n1" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
+    <property name="restartRequiresConfirmation" value="false" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="ar.com.ada.maven.model.DTO" />
+    </key>
+  </component>
+  <component name="RunDashboard">
+    <option name="ruleStates">
+      <list>
+        <RuleState>
+          <option name="name" value="ConfigurationTypeDashboardGroupingRule" />
+        </RuleState>
+        <RuleState>
+          <option name="name" value="StatusDashboardGroupingRule" />
+        </RuleState>
+      </list>
+    </option>
+  </component>
+  <component name="RunManager">
+    <configuration name="App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="ar.com.ada.maven.App" />
+      <module name="BankApp" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ar.com.ada.maven.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.App" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="d671b47c-62f7-45ec-aa0d-b82e580cc4dd" name="Default Changelist" comment="" />
+      <created>1580163437580</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1580163437580</updated>
+    </task>
+    <task id="LOCAL-00001" summary="Class Movements, Type_move, Balance and Transaction">
+      <created>1580165024566</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1580165024566</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Class DAO type_move">
+      <created>1580173021934</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1580173021934</updated>
+    </task>
+    <task id="LOCAL-00003" summary="Class DAO">
+      <created>1580323068816</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1580323068816</updated>
+    </task>
+    <task id="LOCAL-00004" summary="Person controller">
+      <created>1580769613064</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1580769613064</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Person view">
+      <created>1580769640781</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1580769640781</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
+    <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State>
+              <option name="COLUMN_ORDER" />
+            </State>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Class Movements, Type_move, Balance and Transaction" />
+    <MESSAGE value="Class DAO type_move" />
+    <MESSAGE value="Class DAO" />
+    <MESSAGE value="Person controller" />
+    <MESSAGE value="Person view" />
+    <option name="LAST_COMMIT_MESSAGE" value="Person view" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/ar/com/ada/maven/model/DAO/PersonDAO.java</url>
+          <line>98</line>
+          <option name="timeStamp" value="61" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/ar/com/ada/maven/model/DAO/MovementsDAO.java</url>
+          <line>85</line>
+          <option name="timeStamp" value="64" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/ar/com/ada/maven/controller/MovementController.java</url>
+          <line>54</line>
+          <option name="timeStamp" value="69" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
+</project>
